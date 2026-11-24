@@ -286,6 +286,18 @@ button, input, select, textarea { font: inherit; }
 .dashboard-selectors label span { color: var(--sp-muted); font-size: .62rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .dashboard-selectors select { width: 100%; min-width: 0; border: 0; outline: 0; appearance: none; overflow: hidden; background: transparent; color: var(--sp-text); font-size: .78rem; font-weight: 680; text-overflow: ellipsis; white-space: nowrap; }
 .dashboard-selectors label > svg { width: 15px; position: absolute; right: 11px; top: 19px; color: var(--sp-muted); pointer-events: none; }
+.dashboard-factory-value { min-width: 0; display: grid; align-content: center; gap: 5px; padding-block: 6px; }
+.dashboard-factory-value > span { color: var(--sp-muted); font-size: .62rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.dashboard-factory-value > strong { color: var(--sp-text); font-size: .86rem; overflow-wrap: anywhere; }
+.dashboard-selectors label.dashboard-case-selector { height: auto; min-height: 66px; margin: 0; padding: 10px 34px 10px 14px; border: 2px solid color-mix(in srgb, var(--sp-muted) 60%, var(--sp-line)); gap: 5px; }
+.dashboard-case-selector:focus-within { outline: 3px solid color-mix(in srgb, var(--sp-pink) 40%, transparent); outline-offset: 2px; }
+.unified-app-shell .dashboard-case-selector > select { padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--sp-text); font-size: .86rem; min-height: 24px; }
+.dashboard-selectors .dashboard-case-selector > svg { top: 27px; }
+.chart-explanation { color: var(--sp-muted); font-size: .76rem; line-height: 1.6; }
+.dashboard-history { padding: 0; margin: 16px 0; list-style: none; max-height: 300px; overflow-y: auto; }
+.dashboard-history li { display: grid; gap: 5px; padding: 12px 0; border-bottom: 1px solid var(--sp-line); }
+.dashboard-history time, .dashboard-history small { color: var(--sp-muted); font-size: .75rem; overflow-wrap: anywhere; }
+.dashboard-history strong { color: var(--sp-text); font-size: .85rem; text-transform: capitalize; }
 .dashboard-account { position: relative; }
 .dashboard-account > button { min-height: 48px; padding: 4px 9px 4px 5px; border: 1px solid var(--sp-line); border-radius: 14px; background: var(--sp-surface); color: var(--sp-text); display: flex; align-items: center; gap: 9px; cursor: pointer; }
 .dashboard-account > button > span { width: 37px; height: 37px; border-radius: 11px; background: linear-gradient(135deg, #457e8d, #1f5968); color: white; display: grid; place-items: center; font-weight: 800; }

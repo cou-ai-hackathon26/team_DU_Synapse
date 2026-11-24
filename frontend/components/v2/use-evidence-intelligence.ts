@@ -1,189 +1,97 @@
 "use client";
 
-import type { Session } from "@supabase/supabase-js";
-import { useEffect, useMemo, useState } from "react";
-import type { components } from "@/lib/schema";
-import { api, type Case, type Config, type Dossier, message } from "@/lib/api";
-import {
-  authorizedFactories,
-  casesForFactory,
-  latestReadableRun,
-  type EvidenceResult,
-} from "@/lib/evidence-intelligence";
-import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
-
-type AccountState = "restoring" | "signed-out" | "loading" | "ready" | "error";
-type EvidenceState = "idle" | "loading" | "ready" | "error";
+import { useEffect, useState } from "react";
+import { api, type Dossier, message } from "@/lib/api";
+import { latestReadableRun } from "@/lib/evidence-intelligence";
+import { loadDashboardData, type DashboardData } from "@/lib/dashboard-data";
+import { useAuth } from "./auth-provider";
+import { loadDashboardScope, selectDashboardScope, type DashboardScope } from "@/lib/dashboard-scope";
 
 export function useEvidenceIntelligence() {
-  const [session, setSession] = useState<Session | null>(null);
-  const [accountState, setAccountState] = useState<AccountState>("restoring");
-  const [profile, setProfile] = useState<components["schemas"]["AccountProfile"] | null>(null);
-  const [cases, setCases] = useState<Case[]>([]);
-  const [selectedFactory, setSelectedFactory] = useState("");
-  const [selectedCaseId, setSelectedCaseId] = useState("");
-  const [dossier, setDossier] = useState<Dossier | null>(null);
-  const [results, setResults] = useState<EvidenceResult[]>([]);
-  const [evidenceState, setEvidenceState] = useState<EvidenceState>("idle");
-  const [error, setError] = useState("");
+  const auth = useAuth();
+  const owner = auth.profile ? `${auth.profile.id}:${auth.profile.role}:${auth.profile.factory_id ?? ""}` : "";
+  const token = auth.session?.access_token;
+  const [caseData, setCaseData] = useState<{ owner: string; scope: DashboardScope; error: string }>({ owner: "", scope: { factories: [], cases: [] }, error: "" });
+  const [choice, setChoice] = useState({ owner: "", factoryId: "", caseId: "" });
+  const [snapshot, setSnapshot] = useState<{ key: string; data: DashboardData | null; error: string }>({ key: "", data: null, error: "" });
+  const scope = caseData.owner === owner && auth.state === "authenticated" ? caseData.scope : { factories: [], cases: [] };
+  const selected = selectDashboardScope(scope, choice.owner === owner ? choice.factoryId : "", choice.owner === owner ? choice.caseId : "");
+  const selectedFactoryId = selected.factory?.id ?? "";
+  const selectedCaseId = selected.selectedCase?.id ?? "";
+  const cases = selected.cases;
+  const key = `${owner}:${selectedFactoryId}:${selectedCaseId}`;
+  const current = snapshot.key === key && auth.state === "authenticated" ? snapshot : null;
 
   useEffect(() => {
-    let active = true;
-    let unsubscribe: (() => void) | undefined;
-    async function restore() {
+    if (!owner || auth.state !== "authenticated") return;
+    let factoryId = "";
+    try { factoryId = window.sessionStorage.getItem(`safetyproof-dashboard-factory:${owner}`) ?? ""; } catch { /* Storage is optional. */ }
+    setChoice({ owner, factoryId, caseId: "" });
+  }, [auth.state, owner]);
+  useEffect(() => {
+    if (choice.owner !== owner || !selectedFactoryId) return;
+    try { window.sessionStorage.setItem(`safetyproof-dashboard-factory:${owner}`, selectedFactoryId); } catch { /* Storage is optional. */ }
+  }, [choice.owner, owner, selectedFactoryId]);
+
+  useEffect(() => {
+    if (!token || !owner || auth.state !== "authenticated") return;
+    const controller = new AbortController();
+    let running = false;
+    const refresh = async () => {
+      if (running) return;
+      running = true;
       try {
-        const config = await api<Config>("/v1/config");
-        if (!active) return;
-        const auth = getSupabaseBrowserClient(config);
-        const { data, error: sessionError } = await auth.auth.getSession();
-        if (sessionError) throw sessionError;
-        if (!active) return;
-        setSession(data.session);
-        setAccountState(data.session ? "loading" : "signed-out");
-        const subscription = auth.auth.onAuthStateChange((_event, next) => {
-          if (!active) return;
-          setSession(next);
-          setAccountState(next ? "loading" : "signed-out");
-        });
-        unsubscribe = () => subscription.data.subscription.unsubscribe();
+        const scope = await loadDashboardScope(auth.profile!, <T,>(path: string) => api<T>(path, token, "GET", undefined, controller.signal));
+        if (!controller.signal.aborted) setCaseData({ owner, scope, error: "" });
       } catch (caught) {
-        if (!active) return;
-        setError(message(caught));
-        setAccountState("error");
-      }
-    }
-    void restore();
-    return () => {
-      active = false;
-      unsubscribe?.();
+        if (!controller.signal.aborted) setCaseData({ owner, scope: { factories: [], cases: [] }, error: message(caught) });
+      } finally { running = false; }
     };
-  }, []);
+    void refresh();
+    const interval = window.setInterval(refresh, 20000);
+    return () => { controller.abort(); window.clearInterval(interval); };
+  }, [auth.state, auth.profile?.role, owner, token]);
 
-  const token = session?.access_token;
   useEffect(() => {
-    if (!token) {
-      setProfile(null);
-      setCases([]);
-      setDossier(null);
-      setResults([]);
-      return;
-    }
+    if (!token || !owner || !selectedCaseId || auth.state !== "authenticated") return;
     const controller = new AbortController();
-    setAccountState("loading");
-    setError("");
-    void api<components["schemas"]["AccountProfile"]>(
-      "/v1/me",
-      token,
-      "GET",
-      undefined,
-      controller.signal,
-    )
-      .then(async (nextProfile) => {
-        const nextCases = nextProfile.role === "admin"
-          ? []
-          : await api<Case[]>(
-              "/v1/cases",
-              token,
-              "GET",
-              undefined,
-              controller.signal,
-            );
-        if (controller.signal.aborted) return;
-        setProfile(nextProfile);
-        setCases(nextCases);
-        setAccountState("ready");
-      })
-      .catch((caught) => {
-        if (controller.signal.aborted) return;
-        setError(message(caught));
-        setAccountState("error");
-      });
-    return () => controller.abort();
-  }, [token]);
+    let running = false;
+    const refresh = async () => {
+      if (running) return;
+      running = true;
+      try {
+        const dossier = await api<Dossier>(`/v1/cases/${selectedCaseId}`, token, "GET", undefined, controller.signal);
+        if (dossier.case.id !== selectedCaseId || dossier.case.factory !== selected.factory?.name) throw new Error("Case response does not match the selected authorized scope.");
+        const data = await loadDashboardData(dossier, <T,>(path: string) => api<T>(path, token, "GET", undefined, controller.signal));
+        if (!controller.signal.aborted) setSnapshot({ key, data, error: "" });
+      } catch (caught) {
+        if (!controller.signal.aborted) setSnapshot({ key, data: null, error: message(caught) });
+      } finally { running = false; }
+    };
+    void refresh();
+    const interval = window.setInterval(refresh, 20000);
+    return () => { controller.abort(); window.clearInterval(interval); };
+  }, [auth.state, key, owner, selectedCaseId, selected.factory?.name, token]);
 
-  const factories = useMemo(() => authorizedFactories(cases), [cases]);
-  const factoryCases = useMemo(
-    () => casesForFactory(cases, selectedFactory),
-    [cases, selectedFactory],
-  );
-
-  useEffect(() => {
-    if (!factories.length) {
-      setSelectedFactory("");
-      return;
-    }
-    if (!factories.includes(selectedFactory)) setSelectedFactory(factories[0]);
-  }, [factories, selectedFactory]);
-
-  useEffect(() => {
-    if (!factoryCases.length) {
-      setSelectedCaseId("");
-      return;
-    }
-    if (!factoryCases.some((item) => item.id === selectedCaseId)) {
-      setSelectedCaseId(factoryCases[0].id);
-    }
-  }, [factoryCases, selectedCaseId]);
-
-  useEffect(() => {
-    if (!token || !selectedCaseId || !cases.some((item) => item.id === selectedCaseId)) {
-      setDossier(null);
-      setResults([]);
-      setEvidenceState("idle");
-      return;
-    }
-    const controller = new AbortController();
-    setEvidenceState("loading");
-    setError("");
-    void api<Dossier>(
-      `/v1/cases/${selectedCaseId}`,
-      token,
-      "GET",
-      undefined,
-      controller.signal,
-    )
-      .then(async (nextDossier) => {
-        const run = latestReadableRun(nextDossier);
-        const nextResults = run
-          ? await api<EvidenceResult[]>(
-              `/v1/runs/${run.id}/results`,
-              token,
-              "GET",
-              undefined,
-              controller.signal,
-            )
-          : [];
-        if (controller.signal.aborted) return;
-        setDossier(nextDossier);
-        setResults(nextResults);
-        setEvidenceState("ready");
-      })
-      .catch((caught) => {
-        if (controller.signal.aborted) return;
-        setDossier(null);
-        setResults([]);
-        setError(message(caught));
-        setEvidenceState("error");
-      });
-    return () => controller.abort();
-  }, [cases, selectedCaseId, token]);
-
+  const data = current?.data;
   return {
-    accountState,
-    evidenceState,
-    error,
-    profile,
-    token,
-    cases,
-    factories,
-    factoryCases,
-    selectedFactory,
-    selectedCaseId,
-    setSelectedFactory,
-    setSelectedCaseId,
-    dossier,
-    run: dossier ? latestReadableRun(dossier) : undefined,
-    results,
-    realMode: accountState === "ready",
+    accountState: auth.state === "loading" ? "restoring" : caseData.owner === owner ? "ready" : "loading",
+    evidenceState: current?.error ? "error" : data ? "ready" : selectedCaseId ? "loading" : "idle",
+    error: current?.error || (caseData.owner === owner ? caseData.error : ""),
+    profile: auth.profile, token, cases, factoryCases: cases, factories: scope.factories,
+    selectedFactory: selected.factory?.name ?? "", selectedFactoryId,
+    setSelectedFactoryId: (factoryId: string) => {
+      if (auth.profile?.role === "reviewer" && scope.factories.some((f) => f.id === factoryId)) setChoice({ owner, factoryId, caseId: "" });
+    },
+    selectedCaseId, setSelectedCaseId: (caseId: string) => {
+      if (cases.some((c) => c.id === caseId)) setChoice({ owner, factoryId: selectedFactoryId, caseId });
+    },
+    dossier: data?.dossier ?? null,
+    data: data ?? null,
+    documentError: data?.documentError ?? "", historyRestricted: data?.historyRestricted ?? false,
+    run: data ? latestReadableRun(data.dossier) : undefined,
+    results: data?.results ?? [], history: data?.history ?? [], board: data?.board ?? null,
+    boardError: data?.boardError ?? "", resultsError: data?.resultsError ?? "",
+    realMode: auth.state === "authenticated" && caseData.owner === owner,
   };
 }

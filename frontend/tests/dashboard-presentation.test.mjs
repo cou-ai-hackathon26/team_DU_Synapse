@@ -13,10 +13,12 @@ test("dashboard KPI cards reserve separate label, value, and detail rows", () =>
   assert.match(css, /\.kpi-card strong \{[^}]*line-height: \.95;/s);
 });
 
-test("factory and case selectors remain responsive and identify full selections", () => {
+test("reviewer receives a factory selector and managers retain fixed factory text", () => {
   assert.match(css, /\.dashboard-selectors \{[^}]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/s);
   assert.doesNotMatch(css, /\.dashboard-selectors \{ display: none;/);
-  assert.match(dashboard, /aria-label="Select factory" title=/);
+  assert.match(dashboard, /role === "reviewer" \? \([\s\S]*aria-label="Select factory"/);
+  assert.match(dashboard, /className="dashboard-factory-value"/);
+  assert.match(css, /label\.dashboard-case-selector \{[^}]*border: 2px/s);
   assert.match(dashboard, /aria-label="Select case" title=/);
 });
 

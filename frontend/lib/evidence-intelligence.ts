@@ -63,7 +63,7 @@ export function casesForFactory(cases: Case[], factory: string) {
 }
 
 export function latestReadableRun(dossier: Dossier): Run | undefined {
-  return dossier.runs.find((run) =>
-    ["complete", "partial"].includes(run.status),
-  );
+  return [...dossier.runs]
+    .filter((run) => ["complete", "partial"].includes(run.status))
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))[0];
 }
