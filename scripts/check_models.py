@@ -1,4 +1,4 @@
-"""Run a small synthetic smoke test against the configured Gemini project."""
+"""Smoke-test the configured structured provider and Gemini embeddings."""
 
 import asyncio
 import sys
@@ -10,11 +10,14 @@ from safetyproof.models import SecondOpinion
 
 async def main():
     cfg = settings()
-    if not cfg.gemini_api_key:
+    if not cfg.gemini_keys():
         print(
-            "Set GEMINI_API_KEY in the ignored .env file to run the live check.",
+            "Set GEMINI_API_KEY or GEMINI_API_KEYS for retrieval embeddings.",
             file=sys.stderr,
         )
+        return 2
+    if cfg.llm_provider == "xai" and not cfg.xai_api_key:
+        print("Set XAI_API_KEY for xAI structured inference.", file=sys.stderr)
         return 2
     ai = Gemini(cfg)
     request = {
@@ -35,13 +38,13 @@ async def main():
         print(str(exc), file=sys.stderr)
         return 1
     finally:
-        await ai.client.aio.aclose()
+        await ai.aclose()
     ok = (
         first["relation"] == second["relation"] == "contradicts"
         and len(vectors[0]) == 768
     )
     print(
-        f"Structured verdict {first['relation']}; blind verdict {second['relation']}; embedding dimensions {len(vectors[0])}"
+        f"{cfg.llm_provider} structured verdict {first['relation']}; blind verdict {second['relation']}; embedding dimensions {len(vectors[0])}"
     )
     return 0 if ok else 1
 

@@ -233,14 +233,48 @@ def evaluation():
     print(f"Generated {len(labels)} synthetic assessment bundles.")
 
 
+def hazard_history_example():
+    folder = ROOT / "output" / "pdf" / "hazard-history"
+    factory = "Kadam Weaving Works"
+    inspections = [
+        ("01-march-inspection.pdf", "March safety inspection", "9 March 2026",
+         "Finding FI-26. On 9 March 2026, eight cartons blocked the access aisle to emergency Exit E-07."),
+        ("03-april-follow-up.pdf", "April follow-up inspection", "13 April 2026",
+         "Finding FI-26. On 13 April 2026, Exit E-07 was still obstructed by cartons in the access aisle."),
+        ("04-may-follow-up.pdf", "May follow-up inspection", "11 May 2026",
+         "On 11 May 2026, the inspector independently verified that finding FI-26 was resolved: Exit E-07 and its access aisle were clear, and the door opened fully."),
+        ("05-june-follow-up.pdf", "June follow-up inspection", "8 June 2026",
+         "Finding FI-26. On 8 June 2026, packed cartons again blocked the access aisle to Exit E-07."),
+    ]
+    for filename, title, date, observation in inspections:
+        render(folder / filename, title, [
+            f"Inspection date: {date}.",
+            "Issuer: Lakeview Safety Inspection Service, external inspector.",
+            "Inspection area: Building A, ground floor, emergency exit aisle.",
+            observation,
+            "Inspection method: The reviewer walked the marked route from the packing area to the exterior door and visually checked the access aisle from both directions. The reviewer compared the location with the posted evacuation map and recorded the condition on the day of the visit.",
+            "Scope: This inspection covers the ground-floor access aisle and the emergency exit at the end of that aisle. Other floors, fire suppression equipment, electrical installations, evacuation drills and training records are outside the scope of this visit.",
+        ], factory=factory)
+    render(folder / "02-bangla-corrective-action-plan.pdf", "Corrective action plan", [
+        "Issue date: 12 March 2026. Issuer: Factory management.",
+        "Finding ID: FI-26. Action ID: CA-26. Exit: E-07.",
+        "সংশোধনী কর্মপরিকল্পনা: জরুরি বহির্গমন পথ থেকে কার্টন সরানো।",
+        "কারখানার দাবি: কার্টন সরানো হয়েছে এবং পথটি এখন খোলা।",
+        "কারখানার নিজস্ব নথি। কোনো স্বাধীন পরিদর্শন করা হয়নি।",
+    ], scan=True, factory=factory)
+
+
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--evaluation", action="store_true")
     p.add_argument("--closure-example", action="store_true")
+    p.add_argument("--hazard-history-example", action="store_true")
     args = p.parse_args()
     if args.evaluation:
         evaluation()
     elif args.closure_example:
         closure_example()
+    elif args.hazard_history_example:
+        hazard_history_example()
     else:
         demo()

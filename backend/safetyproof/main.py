@@ -26,6 +26,7 @@ from .document_validation import (
     check_factory_record_content,
     check_inspection_content,
 )
+from .hazard_history import hazard_histories
 from .models import (
     CapReviewInput,
     CaseRecord,
@@ -209,7 +210,7 @@ def public_config():
     return {
         "supabase_url": cfg.supabase_url,
         "publishable_key": cfg.supabase_anon_key,
-        "ai_configured": bool(cfg.gemini_keys()),
+        "ai_configured": cfg.ai_ready(),
         "models": cfg.provenance(),
         "limits": {"case_documents": 10},
     }
@@ -356,6 +357,40 @@ async def get_case(cid: UUID, u: User = Depends(user), d=Depends(db)):
         "runs": runs,
         "jobs": jobs,
     }
+
+
+@app.get("/v1/cases/{cid}/hazard-history")
+async def case_hazard_history(cid: UUID, u: User = Depends(user), d=Depends(db)):
+    case = await d.one("cases", cid, token=u.token)
+    if u.role != "reviewer":
+        raise HTTPException(403, "Hazard history is available to reviewers.")
+    case_ids = {str(cid)}
+    if root := case.get("follow_up_root_id"):
+        series = await d.rows(
+            "cases", token=u.token, fields="id",
+            filters={"follow_up_root_id": "eq." + root, "deleting": "eq.false"},
+        )
+        case_ids.update(row["id"] for row in series)
+    case_filter = {"case_id": "in.(" + ",".join(sorted(case_ids)) + ")"}
+    published, versions = await asyncio.gather(
+        d.rows(
+            "verification_runs", token=u.token, fields="id,case_id,manifest",
+            filters={**case_filter, "status": "in.(complete,partial)"},
+            order="created_at.desc,id.desc",
+        ),
+        d.rows("document_versions", token=u.token, fields="id", filters=case_filter, order="id"),
+    )
+    latest = {}
+    for run in published:
+        latest.setdefault(run["case_id"], run)
+    if not latest:
+        return []
+    assessments = await d.rows(
+        "results", token=u.token, fields="run_id,claim,outcome,evidence,checks",
+        filters={"run_id": "in.(" + ",".join(run["id"] for run in latest.values()) + ")"},
+        order="id",
+    )
+    return hazard_histories(latest.values(), assessments, {v["id"] for v in versions})
 
 
 @app.get("/v1/cases/{cid}/followups")
@@ -1094,9 +1129,10 @@ async def new_run(
     cid: UUID, body: RunInput, request: Request, u: User = Depends(user), d=Depends(db)
 ):
     await d.one("cases", cid, token=u.token)
-    if not cfg.gemini_keys():
+    if not cfg.ai_ready():
         raise HTTPException(
-            503, "The service needs a Gemini API key to run verification."
+            503,
+            "The configured inference provider and Gemini embedding key are required to run verification.",
         )
     ticket = await d.rpc(
         "run",

@@ -421,8 +421,11 @@ function Detail({
             <b>Scope check</b><i>{r.checks.scope.replaceAll("_", " ")}</i>
           </span>
           <span className="coverage-check">
-            <b>Second opinion</b>
-            <i>{r.checks.secondary.replaceAll("_", " ")}</i>
+            {r.checks.closure === "explicit_independent_inspection" ? (
+              <><b>Closure check</b><i>Explicit independent inspection</i></>
+            ) : (
+              <><b>Second opinion</b><i>{r.checks.secondary.replaceAll("_", " ")}</i></>
+            )}
           </span>
         </p>
       </details>

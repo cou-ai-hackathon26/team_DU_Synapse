@@ -26,6 +26,8 @@ For scheduled reviewer uploads, the configured `GEMINI_API_KEY` also powers a co
 
 Add a free-tier project key as `GEMINI_API_KEY` in the root `.env`. Before starting the backend, check generation and embeddings with `PYTHONPATH=backend python scripts/check_models.py`. Set `MIN_REQUEST_INTERVAL` according to the project's quota.
 
+Structured extraction and verification can instead use xAI's Responses API by setting `LLM_PROVIDER=xai`, `XAI_API_KEY` and `XAI_MODEL=grok-4.7`. The retrieval index still uses `GEMINI_API_KEYS` with `gemini-embedding-001`; changing embedding providers requires rebuilding stored vectors. Compare the two structured providers on the same synthetic follow-up cases with `PYTHONPATH=backend .venv/bin/python scripts/compare_providers.py`.
+
 Start the complete local application from the repository root with one command:
 
 ```bash

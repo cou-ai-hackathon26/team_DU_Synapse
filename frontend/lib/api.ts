@@ -144,7 +144,7 @@ export type Result = {
     end_date?: string;
   };
   evidence: Ref[];
-  checks: { secondary: string; scope: string };
+  checks: { secondary: string; scope: string; closure?: "explicit_independent_inspection" };
   coverage: {
     documents: {
       version_id: string;

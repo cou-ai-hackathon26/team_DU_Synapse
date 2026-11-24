@@ -174,6 +174,137 @@ def literal_scopes(text):
     ]
 
 
+def finding_reference(quote):
+    refs = {
+        ref.replace("/", "-")
+        for labelled, standard in re.findall(
+            r"\bfinding\s+(?:id\s*)?[:#]?\s*([a-z]{1,8}[-/]\d{1,8})\b|\b(fi[-/]\d{1,8})\b",
+            normalized(quote),
+        )
+        if (ref := labelled or standard)
+    }
+    return next(iter(refs)) if len(refs) == 1 else None
+
+
+def is_closure_statement(quote):
+    """Recognize explicit closure text that the extractor may label as an observation."""
+    reference = finding_reference(quote)
+    if not reference:
+        return False
+    text = " ".join(normalized(quote).split())
+    if re.search(r"\b(?:not|unresolved|still|remain\w*|again|reopen\w*|recur\w*)\b", text):
+        return False
+    ref = re.escape(reference).replace(r"\-", "[-/]")
+    return bool(re.search(
+        rf"\b{ref}\s+(?:was |has been |is )?(?:verified as )?(?:closed|resolved|corrected)\b"
+        rf"|\bverified (?:the )?(?:closure|correction) of (?:finding )?{ref}\b",
+        text,
+    ))
+
+
+def explicit_open_observations(chunk, issued_on):
+    """Recover explicitly labelled observations that the model skipped or paraphrased."""
+    labels = re.finditer(
+        r"\bfinding\s+(?:id\s*[:#]?\s*)?[a-z]{1,8}[-/]\d{1,8}[ \t]*[:.]\s*[^.\n][^.]{0,480}\.",
+        chunk["text"],
+        re.IGNORECASE,
+    )
+    inspection_date = iso(issued_on)
+    for match in labels:
+        quote = match.group().strip()
+        text = normalized(quote)
+        dates = quoted_dates(quote)
+        if inspection_date and dates and inspection_date not in dates:
+            continue
+        if is_closure_statement(quote) or re.search(
+            r"\b(?:no longer|not|previously)\s+(?:\w+\s+){0,2}(?:blocked|obstructed|open|unsafe)\b"
+            r"|\b(?:but now clear|since been cleared)\b",
+            text,
+        ):
+            continue
+        if re.search(
+            r"\b(?:blocked|obstructed|exposed live wires?|missing guard|still open|remains? open|reopened)\b",
+            text,
+        ):
+            yield {
+                "chunk_id": chunk["id"], "quote": quote,
+                "kind": "finding", "finding_id": finding_reference(quote), "severity": "unknown",
+            }
+
+
+def finding_scope_conflicts(first, second):
+    left_ref, right_ref = finding_reference(first), finding_reference(second)
+    if left_ref and right_ref and left_ref != right_ref:
+        return True
+    scopes = []
+    for text, ref in ((first, left_ref), (second, right_ref)):
+        assets, buildings, floors = literal_scopes(text)
+        assets = {
+            asset for asset in assets
+            if asset != ref and not asset.startswith(("fi-", "ca-"))
+        }
+        scopes.append((assets, buildings, floors))
+    return any(left and right and left.isdisjoint(right) for left, right in zip(*scopes))
+
+
+def explicit_closure_anchor(target, chunks, pages, versions):
+    """Accept a later inspector's direct, source-cited certification of the same hazard."""
+    source = target["source"]
+    reference = finding_reference(source["quote"])
+    assets = set(literal_scopes(source["quote"])[0]) - {reference}
+    if not reference or not assets:
+        return None
+    original = versions[source["version_id"]]
+    for chunk in chunks:
+        for sentence in re.findall(r"[^.]{1,650}\.", chunk["text"]):
+            quote = sentence.strip()
+            text = " ".join(normalized(quote).split())
+            if not re.search(
+                r"\binspector (?:independently )?(?:verified|confirmed)\b"
+                r"|\bindependently verified by (?:the )?inspector\b",
+                text,
+            ):
+                continue
+            if (
+                finding_reference(quote) != reference or not is_closure_statement(quote)
+                or re.search(r"\b(?:report(?:ed|s)?|claim(?:ed|s)?|alleged)\b", text)
+                or not assets.intersection(literal_scopes(quote)[0])
+                or finding_scope_conflicts(source["quote"], quote)
+                or not later_closure_citation(original, versions[chunk["version_id"]], target, quote)
+            ):
+                continue
+            if anchor := checked_anchor({"chunk_id": chunk["id"], "quote": quote}, {chunk["id"]: chunk}, pages, versions):
+                return anchor
+    return None
+
+
+def observation_date(source, target):
+    dates = (iso(value) for value in (
+        source.get("issued_on"), target.get("start_date"), target.get("end_date")
+    ))
+    return max((value for value in dates if value), default=None)
+
+
+def later_independent_inspection(source, evidence, target):
+    observed = observation_date(source, target)
+    issued = iso(evidence.get("issued_on"))
+    return bool(
+        observed and issued and issued > observed
+        and evidence["role"] == "inspection" and evidence["issuer"] == "external"
+        and normalized(evidence.get("confirmed_factory"))
+        == normalized(source.get("confirmed_factory"))
+    )
+
+
+def later_closure_citation(source, evidence, target, quote):
+    if not later_independent_inspection(source, evidence, target):
+        return False
+    observed = observation_date(source, target)
+    issued = iso(evidence["issued_on"])
+    dates = quoted_dates(quote)
+    return not dates or any(observed < cited <= issued for cited in dates)
+
+
 def scope_problem(target, verdict, refs, versions, case_period=None):
     if not verdict["compatible"]:
         return "The passages do not establish a common scope."
@@ -193,7 +324,12 @@ def scope_problem(target, verdict, refs, versions, case_period=None):
     )
     for ref in refs:
         esc = literal_scopes(ref["quote"])
-        if any(a and b and not (a & b) for a, b in zip(tsc, esc)):
+        conflict = (
+            finding_scope_conflicts(target["source"]["quote"], ref["quote"])
+            if target["kind"] == "finding"
+            else any(a and b and not (a & b) for a, b in zip(tsc, esc))
+        )
+        if conflict:
             return (
                 "The cited subject or location differs from the inspection statement."
             )
@@ -205,15 +341,8 @@ def scope_problem(target, verdict, refs, versions, case_period=None):
         ):
             return "A written plan or procedure does not establish that work happened."
     if target["kind"] == "finding":
-        t = iso(
-            target.get("end_date") or target.get("start_date") or source["issued_on"]
-        )
-        if not t:
-            return "The original observation date is unclear."
         if not all(
-            versions[r["version_id"]]["issuer"] == "external"
-            and versions[r["version_id"]]["role"] == "inspection"
-            and (iso(versions[r["version_id"]]["issued_on"]) or date.min) > t
+            later_closure_citation(source, versions[r["version_id"]], target, r["quote"])
             for r in refs
         ):
             return "The supplied passages do not document a later independent verification."
@@ -226,7 +355,7 @@ def scope_problem(target, verdict, refs, versions, case_period=None):
         if target.get("start_date") or target.get("end_date"):
             a, b = bounds(target.get("start_date"), target.get("end_date"))
         elif stated_start or stated_end:
-            a, b = bounds(stated_start, stated_end)
+            a, b = stated_start, stated_end
         elif case_period and re.search(r"\b(?:reporting|coverage|review)\s+period\b", normalized(target["source"]["quote"])):
             a, b = bounds(case_period.get("period_start"), case_period.get("period_end"))
         else:
@@ -235,11 +364,11 @@ def scope_problem(target, verdict, refs, versions, case_period=None):
         if c is None and len({r["version_id"] for r in refs}) == 1:
             doc = versions[refs[0]["version_id"]]
             c, d = bounds(doc["period_start"], doc["period_end"])
-        if verdict["label"] == "contradicts" and not all((a, b, c, d)):
-            return "A common reporting period could not be established."
         cited_dates = {when for ref in refs for when in quoted_dates(ref["quote"])}
         if a and b and cited_dates and all(not a <= when <= b for when in cited_dates):
             return "The dates in the cited quotation fall outside the inspection statement's reporting period."
+        if verdict["label"] == "contradicts" and not all((a, b, c, d)):
+            return "A common reporting period could not be established."
         if a and c and (a > d or c > b):
             return "These sources describe different time periods."
     return None
@@ -301,6 +430,34 @@ async def verify_one(
         hypothesis["question"] = (
             "Do later records document independent verification that this specific finding was corrected?"
         )
+        source = versions[target["source"]["version_id"]]
+        closure_versions = {
+            version_id for version_id, version in versions.items()
+            if later_independent_inspection(source, version, target)
+        }
+        initial = [c for c in initial if c["version_id"] in closure_versions]
+        all_other = [c for c in all_other if c["version_id"] in closure_versions]
+        unreadable = sum(
+            versions[vid]["page_count"] - versions[vid]["readable_pages"]
+            for vid in closure_versions
+        )
+        coverage["unreadable_pages"] = unreadable
+        coverage["retrieved"] = [c["id"] for c in initial if c["id"] in retrieval_ids]
+        if not closure_versions:
+            coverage["full_search"] = True
+            return result(
+                "unresolved",
+                "No later independent inspection was selected. Factory corrective-action records cannot establish closure.",
+            )
+        if closure := explicit_closure_anchor(target, all_other, pages, versions):
+            checks["scope"] = "compatible"
+            checks["closure"] = "explicit_independent_inspection"
+            coverage["examined_chunks"] = [closure["chunk_id"]]
+            return result(
+                "supported",
+                "A later independent inspection explicitly verified correction of this finding at the same asset.",
+                [closure],
+            )
 
     async def evaluate(candidates):
         coverage["examined_chunks"] = [c["id"] for c in candidates]
@@ -479,11 +636,29 @@ async def run_verification(db, ai, job, run, step):
             extracted = await ask(
                 EXTRACT, {"passages": [passage(c, versions) for c in group]}, TargetList
             )
-            for item in extracted["items"]:
-                ref = checked_anchor(item, {c["id"]: c for c in group}, pages, versions)
+            source_chunks = {c["id"]: c for c in group}
+            observations = []
+            fallback = [
+                item for chunk in group
+                for item in explicit_open_observations(chunk, version.get("issued_on"))
+            ]
+            for item in [*extracted["items"], *fallback]:
+                ref = checked_anchor(item, source_chunks, pages, versions)
                 if not ref:
                     rejected += 1
                     continue
+                if item["kind"] == "finding" and is_closure_statement(ref["quote"]):
+                    continue
+                if item["kind"] == "finding":
+                    reference = finding_reference(ref["quote"])
+                    if reference and any(
+                        old_id == reference and old["page_id"] == ref["page_id"]
+                        and old["start"] < ref["end"] and old["end"] > ref["start"]
+                        for old_id, old in observations
+                    ):
+                        continue
+                    if reference:
+                        observations.append((reference, ref))
                 rid = str(
                     uuid5(
                         UUID(run["id"]),

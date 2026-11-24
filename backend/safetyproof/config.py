@@ -1,5 +1,6 @@
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -22,7 +23,12 @@ class Settings(BaseSettings):
     admin_password: str = Field(default="", repr=False)
     gemini_api_key: str = Field(default="", repr=False)
     gemini_api_keys: str = Field(default="", repr=False)
+    llm_provider: Literal["gemini", "xai"] = "gemini"
     llm_model: str = "gemini-3.5-flash-lite"
+    xai_api_key: str = Field(default="", repr=False)
+    xai_api_url: str = "https://api.x.ai/v1"
+    xai_model: str = "grok-4.7"
+    xai_reasoning_effort: Literal["low", "medium", "high", "xhigh"] = "low"
     embedding_model: str = "gemini-embedding-001"
     cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
     tessdata_prefix: str = str(
@@ -39,7 +45,8 @@ class Settings(BaseSettings):
     def provenance(self):
         return {
             "pipeline": PIPELINE,
-            "llm": self.llm_model,
+            "llm": self.xai_model if self.llm_provider == "xai" else self.llm_model,
+            "llm_provider": self.llm_provider,
             "embedding": self.embedding_model,
             "dimensions": 768,
             "second_opinion": "blind_same_model",
@@ -51,6 +58,13 @@ class Settings(BaseSettings):
         if not pool and self.gemini_api_key:
             pool = [self.gemini_api_key.strip()]
         return list(dict.fromkeys(pool))
+
+    def ai_ready(self):
+        # Retrieval currently uses the existing Gemini embedding index even when
+        # xAI performs extraction and verification.
+        return bool(self.gemini_keys()) and (
+            self.llm_provider == "gemini" or bool(self.xai_api_key)
+        )
 
 
 @lru_cache

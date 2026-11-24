@@ -280,13 +280,12 @@ async def analyze_cap(run, targets, versions, pages, chunks, ask, step):
             )
     unreadable = sum(doc["page_count"] - doc["readable_pages"] for doc in cap_docs)
     chunk_text = {chunk["id"]: chunk["text"] for chunk in chunks}
-    page_text = {page["id"]: page["text"] for page in pages}
     for target in targets.values():
         if target.get("kind") != "finding" or not target.get("finding_id"):
             continue
         source = target.get("source", {})
         context = chunk_text.get(source.get("chunk_id"), "")
-        context = context or page_text.get(source.get("page_id"), "")
+        context = context or pages.get(source.get("page_id"), {}).get("text", "")
         finding_id = exact_reference(target["finding_id"], context)
         if finding_id:
             target["verified_finding_refs"] = [finding_id]

@@ -73,6 +73,7 @@ export function activeShellKey(pathname: string, view: string | null): ShellNavK
     case "documents": return "documents";
     case "review":
     case "cap":
+    case "hazards":
     case "history": return "review";
     case "corrective": return "corrective";
     case "factories": return "factories";
@@ -92,6 +93,7 @@ export function shellTitle(pathname: string, view: string | null) {
     review: "Evidence review",
     cap: "CAP matching",
     history: "Run history",
+    hazards: "Hazard history",
     corrective: "Corrective work",
     overview: "Case overview",
     library: "Document library",

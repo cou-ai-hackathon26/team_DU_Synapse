@@ -1,6 +1,8 @@
+from uuid import uuid4
+
 import pytest
 
-from safetyproof.cap import complete_action_metadata, linkage, suggest_links
+from safetyproof.cap import analyze_cap, complete_action_metadata, linkage, suggest_links
 from safetyproof.verify import checked_anchor
 
 
@@ -89,6 +91,50 @@ def finding(
         "asset": asset,
         "source": {"quote": quote},
     }
+
+
+@pytest.mark.asyncio
+async def test_cap_analysis_recovers_finding_reference_from_page_lookup():
+    quote = "CA-01 for finding FI-16: Clear Exit E-02."
+    _, chunks, pages, versions = metadata_evidence(quote, quote, "CA-01")
+    chunks["chunk"].update(page_no=1, end_at=len(quote))
+    versions["cap"].update(
+        role="cap",
+        page_count=1,
+        readable_pages=1,
+        issued_on=None,
+        period_start=None,
+        period_end=None,
+        issuer=None,
+        confirmed_factory=None,
+    )
+    pages["inspection-page"] = {
+        "id": "inspection-page",
+        "text": "Finding FI-16. Exit E-02 was obstructed.",
+    }
+    target = finding("Exit E-02 was obstructed.")
+    target["source"]["page_id"] = "inspection-page"
+
+    async def ask(prompt, inputs, schema):
+        return {
+            "items": [{"chunk_id": "chunk", "quote": quote, "finding_refs": ["FI-16"]}]
+        }
+
+    async def step(operation, payload):
+        pass
+
+    analysis = await analyze_cap(
+        {"id": str(uuid4())},
+        {"result-1": target},
+        versions,
+        pages,
+        list(chunks.values()),
+        ask,
+        step,
+    )
+
+    assert analysis["coverage"]["complete"]
+    assert [link["basis"] for link in analysis["suggestions"]] == ["explicit_reference"]
 
 
 def action(quote, asset, refs=None):

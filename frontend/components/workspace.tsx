@@ -36,6 +36,7 @@ import { Documents, FactoryDocuments } from "./documents";
 import { Analysis } from "./analysis";
 import { CaseOverview } from "./case-overview";
 import { RunHistory } from "./run-history";
+import { HazardHistory } from "./hazard-history";
 import { CapReview } from "./cap-review";
 import { AdminWorkspace } from "./admin-workspace";
 import type { Factory } from "./onboarding";
@@ -533,7 +534,7 @@ function App({ basePath }: { basePath: string }) {
                           ["cap", "CAP matching"],
                           ["history", "Run history"],
                           ...(current.role === "reviewer"
-                            ? [["corrective", "Corrective work"]]
+                            ? [["hazards", "Hazard history"], ["corrective", "Corrective work"]]
                             : []),
                         ]
                     ).map(([key, text]) => (
@@ -570,6 +571,8 @@ function App({ basePath }: { basePath: string }) {
                       token={token}
                       open={(v, r, i) => go(v, cid, r, i)}
                     />
+                  ) : view === "hazards" && current.role === "reviewer" ? (
+                    <HazardHistory key={cid} caseId={cid} token={token!} preview={setPreview} />
                   ) : view === "history" ? (
                     <RunHistory
                       key={cid}

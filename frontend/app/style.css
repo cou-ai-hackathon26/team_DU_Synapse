@@ -648,6 +648,11 @@ button.file-row:hover,
   width: 100%;
   text-align: left;
 }
+.hazard-history-events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 .row-main {
   flex: 1;
   min-width: 0;
