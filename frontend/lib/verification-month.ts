@@ -1,4 +1,4 @@
-import type { Doc, Version } from "./api";
+import type { Doc, Dossier, Version } from "./api";
 
 type RecordVersion = Pick<
   Version,
@@ -68,6 +68,29 @@ export function inspectionMonths(
   return [...months].sort().reverse();
 }
 
+type VerificationCase = Pick<Dossier, "case" | "documents" | "versions" | "prior_case_ids">;
+
+export function verificationMonthOptions({ case: inspection, documents, versions }: VerificationCase) {
+  const reported = inspectionMonths(documents, versions);
+  const year = (inspection.inspection_on || reported[0] || inspection.created_at).slice(0, 4);
+  const months = Array.from({ length: 12 }, (_, index) => `${year}-${String(index + 1).padStart(2, "0")}`);
+  return [...new Set([...months, ...reported])].sort();
+}
+
+export function usesPreviousInspection(dossier: VerificationCase, month: string) {
+  return !!dossier.case.follow_up_of && month === dossier.case.inspection_on?.slice(0, 7);
+}
+
+export function verificationSelection(dossier: VerificationCase, month: string): string[] {
+  if (usesPreviousInspection(dossier, month)) {
+    const previous = dossier.versions.filter((version) => version.case_id === dossier.case.follow_up_of);
+    return latestReadyVersions(previous).map((version) => version.id);
+  }
+  if (!month) return latestReadyVersions(dossier.versions).map((version) => version.id);
+  if (!inspectionMonths(dossier.documents, dossier.versions).includes(month)) return [];
+  return documentsForMonth(dossier.documents, dossier.versions, month, dossier.case.inspection_on, dossier.prior_case_ids);
+}
+
 /** Date-based suggestions; reviewers can add records needed for wider claims. */
 export function documentsForMonth(
   documents: Pick<Doc, "id" | "role">[],
@@ -103,7 +126,7 @@ export function documentsForMonth(
   const selected = new Map(current.map((v) => [v.document_id, v]));
   const priorCases = new Set(priorCaseIds);
   const priorVersions = latestReadyVersions(
-    versions.filter((v) => priorCases.has(v.case_id || "")),
+    available.filter((v) => priorCases.has(v.case_id || "")),
   );
   for (const v of priorVersions) selected.set(v.document_id, v);
   const context = latestReadyVersions(

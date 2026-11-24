@@ -2,10 +2,12 @@
 
 import re
 import unicodedata
+from collections import defaultdict
 from datetime import date
 from uuid import UUID, uuid5
 from .ai import BLIND, EXTRACT, VERIFY, InferenceFailure, digest
 from .models import TargetList, Verdict, SecondOpinion
+from .documentary_report import carried_entries, is_document_review, original_statement
 
 DIGITS = str.maketrans("০১২৩৪৫৬৭৮৯", "0123456789")
 ABSENCE_LIMIT = 52000
@@ -98,7 +100,7 @@ def assessment_type(target):
     """Separate claims about written requirements from claims about events."""
     if target["kind"] == "finding":
         return "finding_closure"
-    quote = normalized(target["source"]["quote"])
+    quote = normalized(original_statement(target["source"]["quote"]))
     requirement = re.compile(
         r"\b(requires?|must|shall|is required to|are required to|"
         r"according to (?:the )?(?:sop|procedure|policy)|"
@@ -114,10 +116,10 @@ def assessment_type(target):
     return "event"
 
 
-def checked_anchor(choice, chunks, pages, versions):
+def checked_anchor(choice, chunks, pages, versions, *, max_quote=2600):
     chunk = chunks.get(choice.get("chunk_id"))
     quote = choice.get("quote", "").strip()
-    if not chunk or len(quote) < 4 or len(quote) > 2600:
+    if not chunk or len(quote) < 4 or len(quote) > max_quote:
         return None
     # Whitespace changes are reversible. Original characters, digits and punctuation must match.
     expr = r"\s+".join(re.escape(s) for s in quote.split())
@@ -291,6 +293,7 @@ def later_independent_inspection(source, evidence, target):
     return bool(
         observed and issued and issued > observed
         and evidence["role"] == "inspection" and evidence["issuer"] == "external"
+        and not evidence.get("document_review")
         and normalized(evidence.get("confirmed_factory"))
         == normalized(source.get("confirmed_factory"))
     )
@@ -351,12 +354,13 @@ def scope_problem(target, verdict, refs, versions, case_period=None):
             # A requirement claim is about what the written rule says, not when
             # the rule was issued or whether the activity was later performed.
             return None
-        stated_start, stated_end = stated_period(target["source"]["quote"])
+        statement = original_statement(target["source"]["quote"])
+        stated_start, stated_end = stated_period(statement)
         if target.get("start_date") or target.get("end_date"):
             a, b = bounds(target.get("start_date"), target.get("end_date"))
         elif stated_start or stated_end:
             a, b = stated_start, stated_end
-        elif case_period and re.search(r"\b(?:reporting|coverage|review)\s+period\b", normalized(target["source"]["quote"])):
+        elif case_period and re.search(r"\b(?:reporting|coverage|review)\s+period\b", normalized(statement)):
             a, b = bounds(case_period.get("period_start"), case_period.get("period_end"))
         else:
             a, b = bounds(source["period_start"], source["period_end"])
@@ -417,7 +421,7 @@ async def verify_one(
         }
 
     hypothesis = {
-        "statement": target["source"]["quote"],
+        "statement": original_statement(target["source"]["quote"]),
         "kind": target["kind"],
         "assessment_type": assessment_type(target),
         "scope": {
@@ -580,6 +584,12 @@ async def run_verification(db, ai, job, run, step):
         filters=query,
         order="version_id,page_no,start_at",
     )
+    for page in pages.values():
+        if page["page_no"] == 1 and is_document_review(page):
+            versions[page["version_id"]] = {**versions[page["version_id"]], "document_review": True}
+    chunks_by_page = defaultdict(list)
+    for chunk in chunks:
+        chunks_by_page[chunk["page_id"]].append(chunk)
 
     async def cached(key_parts, callback):
         key = digest([run["config"], key_parts])
@@ -621,6 +631,16 @@ async def run_verification(db, ai, job, run, step):
     rejected = 0
     for version in manifest:
         if version["role"] != "inspection":
+            continue
+        if versions[version["id"]].get("document_review"):
+            report_pages = (page for page in pages.values() if page["version_id"] == version["id"])
+            for item, chunk in carried_entries(report_pages, chunks_by_page):
+                ref = checked_anchor(item, {chunk["id"]: chunk}, pages, versions, max_quote=2800)
+                if not ref:
+                    rejected += 1
+                    continue
+                rid = str(uuid5(UUID(run["id"]), f"{ref['page_id']}/{ref['start']}/{ref['end']}/{item['kind']}"))
+                targets[rid] = {**item, "source": ref}
             continue
         source = [c for c in chunks if c["version_id"] == version["id"]]
         for i in range(0, len(source), 5):
@@ -684,9 +704,12 @@ async def run_verification(db, ai, job, run, step):
         )
         if rid in previous:
             continue
-        other = [c for c in chunks if c["version_id"] != target["source"]["version_id"]]
-        eligible = [v for v in versions if v != target["source"]["version_id"]]
-        text = target["source"]["quote"]
+        eligible = [
+            vid for vid, version in versions.items()
+            if vid != target["source"]["version_id"] and not version.get("document_review")
+        ]
+        other = [c for c in chunks if c["version_id"] in eligible]
+        text = original_statement(target["source"]["quote"])
         vec = await cached(["query", text], lambda: ai.embed([text], "RETRIEVAL_QUERY"))
         hits = await db.rpc(
             "search",

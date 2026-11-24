@@ -27,7 +27,8 @@ def hazard_histories(runs, results, visible_versions):
             continue
 
         observed_on = original["issued_on"]
-        events[reference][(observed_on, "observation", source["quote"])] = {
+        kind = "document_review" if target.get("documentary_carry_forward") else "observation"
+        events[reference][(observed_on, kind, source["quote"])] = {
             "date": observed_on, "source": source,
         }
         checks = row["checks"]
@@ -77,6 +78,13 @@ def hazard_histories(runs, results, visible_versions):
                     continue
                 status = "closed"
                 closed = True
+            elif kind == "document_review":
+                if closed or date == latest_observation:
+                    continue
+                if episode_start is None:
+                    episode_start = date
+                latest_observation = date
+                status = "carried_forward"
             else:
                 if date == latest_observation:
                     continue

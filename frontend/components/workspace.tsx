@@ -585,22 +585,27 @@ function App({ basePath }: { basePath: string }) {
                       key={cid}
                       dossier={current}
                       token={token}
+                      runId={params.get("run")}
+                      findingId={params.get("item")}
                       preview={setPreview}
                       documents={() => go("documents", cid)}
                       review={(r, i) => go("review", cid, r, i)}
                     />
                   ) : view === "review" ? (
                     <Analysis
+                      key={cid}
                       dossier={current}
                       token={token}
                       runId={params.get("run")}
                       itemId={params.get("item")}
                       go={(r, i) => go("review", cid, r, i)}
+                      openCap={(r, i) => go("cap", cid, r, i)}
                       preview={setPreview}
                       refresh={refresh}
                     />
                   ) : (
                     <Documents
+                      key={cid}
                       dossier={current}
                       token={token}
                       configured={!!config.data?.ai_configured}

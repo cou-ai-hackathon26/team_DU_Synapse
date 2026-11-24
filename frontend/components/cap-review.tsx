@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, CheckSquare, FileText, Link2 } from "lucide-react";
 import { api, dateText, message } from "@/lib/api";
@@ -12,13 +12,15 @@ import type {
   Ref,
   Result,
 } from "@/lib/api";
-import { reviewableRuns } from "@/lib/review";
+import { capFindingLinks, capLinkStatus, reviewableRuns } from "@/lib/review";
 import { Busy, ErrorNote, Tag } from "./ui";
 import type { Preview } from "./viewer";
 
 type Props = {
   dossier: Dossier;
   token: string;
+  runId: string | null;
+  findingId: string | null;
   preview: (p: Preview) => void;
   documents: () => void;
   review: (run: string, result: string) => void;
@@ -40,6 +42,8 @@ function ReferenceText({ text }: { text: string }) {
 export function CapReview({
   dossier,
   token,
+  runId,
+  findingId,
   preview,
   documents,
   review,
@@ -48,7 +52,7 @@ export function CapReview({
     run.manifest.some((doc) => doc.role === "cap"),
   );
   const [chosen, setChosen] = useState("");
-  const run = available.find((item) => item.id === chosen) || available[0];
+  const run = available.find((item) => item.id === (chosen || runId)) || available[0];
   const cap = useQuery({
     queryKey: ["cap", run?.id],
     queryFn: () =>
@@ -68,6 +72,11 @@ export function CapReview({
     results.data?.filter((item) => item.claim.kind === "finding") || [];
   const analysis = cap.data?.analysis;
   const events = cap.data?.reviews || [];
+  useEffect(() => {
+    if (findingId && run?.id === runId && analysis && results.data) {
+      document.getElementById(`cap-finding-${findingId}`)?.scrollIntoView({ block: "start" });
+    }
+  }, [analysis, findingId, results.data, run?.id, runId]);
   const writable =
     dossier.role === "reviewer" &&
     !dossier.case.archived &&
@@ -259,19 +268,10 @@ function FindingPanel({
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const suggestions = new Map(
-    analysis.suggestions
-      .filter((link) => link.finding_id === finding.id)
-      .map((link) => [link.action_id, link]),
-  );
+  const relevant = capFindingLinks(analysis, events, finding.id);
   const history = events.filter((event) => event.finding_id === finding.id);
-  const relevant = analysis.actions.filter(
-    (action) =>
-      suggestions.has(action.id) ||
-      history.some((event) => event.action_id === action.id),
-  );
   const unlinked = analysis.actions.filter(
-    (action) => !relevant.some((item) => item.id === action.id),
+    (action) => !relevant.some((item) => item.action.id === action.id),
   );
 
   async function decide(action: CapAction, decision: "confirm" | "dismiss") {
@@ -295,7 +295,7 @@ function FindingPanel({
   }
 
   return (
-    <section className="panel cap-finding">
+    <section className="panel cap-finding" id={`cap-finding-${finding.id}`} style={{ scrollMarginTop: "5rem" }}>
       <div className="section-head">
         <div>
           <h2 dir="auto"><ReferenceText text={finding.claim.source.quote} /></h2>
@@ -314,11 +314,8 @@ function FindingPanel({
             : "Coverage is incomplete. Inspect the original CAP before concluding that there is no matching action."}
         </p>
       )}
-      {relevant.map((action) => {
-        const suggestion = suggestions.get(action.id);
-        const newest = history.findLast(
-          (event) => event.action_id === action.id,
-        );
+      {relevant.map((link) => {
+        const { action, suggestion, review: newest } = link;
         return (
           <article className="cap-action" key={action.id}>
             <div className="inline-actions">
@@ -332,15 +329,7 @@ function FindingPanel({
                       : ""
                 }
               >
-                {newest
-                  ? newest.decision === "confirm"
-                    ? "Link confirmed"
-                    : "Link dismissed"
-                  : suggestion?.basis === "explicit_reference_conflict"
-                    ? "FI reference · check mismatch"
-                  : suggestion?.basis === "explicit_reference"
-                    ? "Explicit reference"
-                    : "Possible match"}
+                {capLinkStatus(link)}
               </Tag>
               {action.action_ref && <span className="reference-id cap-reference">{action.action_ref}</span>}
             </div>

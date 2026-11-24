@@ -2,6 +2,8 @@
 
 import re
 
+from .documentary_report import is_document_review
+
 LEGAL_SUFFIXES = {
     "ltd",
     "limited",
@@ -104,7 +106,12 @@ def _local_inspection_check(pages, factory):
     findings_present = _has_any(normalized, finding_cues)
     evidence_present = _has_any(normalized, evidence_cues)
     enough_text = len(re.findall(r"\b[\w-]+\b", normalized)) >= 120
-    if inspection_structure and findings_present and evidence_present and enough_text:
+    documentary_report = (
+        bool(pages) and is_document_review(pages[0])
+        and bool(re.search(r"\binspection date:\s*\d{4}-\d{2}-\d{2}\b", normalized))
+        and "sources reviewed" in normalized and "documentary follow-up inspection report" in normalized
+    )
+    if documentary_report or (inspection_structure and findings_present and evidence_present and enough_text):
         return {
             "content_check": "valid",
             "content_reason": "Local OCR checks found the factory name, inspection structure, findings, and specific follow-up evidence in the PDF. This does not verify whether the claims are true.",

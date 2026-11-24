@@ -30,9 +30,11 @@ import { Busy, DocIcon, ErrorNote, Modal, Tag } from "./ui";
 import { Preview } from "./viewer";
 import { sampleCatalog } from "@/lib/samples";
 import {
-  documentsForMonth,
   inspectionMonths,
   latestReadyVersions,
+  usesPreviousInspection,
+  verificationMonthOptions,
+  verificationSelection,
 } from "@/lib/verification-month";
 
 type Props = {
@@ -67,34 +69,16 @@ export function Documents({
     [inspect, setInspect] = useState<Version | null>(null),
     [remove, setRemove] = useState(false),
     [removeDocument, setRemoveDocument] = useState<Doc | null>(null);
+  const scheduledMonth = d.case.inspection_on?.slice(0, 7) || "";
+  const [month, setMonth] = useState(scheduledMonth);
   const [err, setErr] = useState(""),
     [busy, setBusy] = useState(false),
-    [selected, setSelected] = useState<string[]>(() => latest(d.versions)),
+    [selected, setSelected] = useState<string[]>(() => verificationSelection(d, month)),
     [custom, setCustom] = useState(false);
-  const [month, setMonth] = useState("");
   const [selectionOpen, setSelectionOpen] = useState(false);
-  const versionKey = d.versions.map((v) => v.id + v.status).join(",");
   useEffect(() => {
-    if (!custom)
-      setSelected(
-        month
-          ? documentsForMonth(
-              d.documents,
-              d.versions,
-              month,
-              d.case.inspection_on,
-              d.prior_case_ids,
-            )
-          : latest(d.versions),
-      );
-  }, [
-    versionKey,
-    custom,
-    month,
-    d.documents,
-    d.versions,
-    d.case.inspection_on,
-  ]);
+    if (!custom) setSelected(verificationSelection(d, month));
+  }, [custom, d, month]);
   function toggle(v: Version) {
     setCustom(true);
     setSelected((prev) =>
@@ -139,27 +123,17 @@ export function Documents({
   const sel = d.versions.filter((v) => selected.includes(v.id)),
     count = sel.reduce((a, v) => a + v.readable_pages, 0),
     pages = sel.reduce((a, v) => a + v.page_count, 0);
-  const hasInspection = sel.some(
-    (v) =>
-      d.documents.find((doc) => doc.id === v.document_id)?.role ===
-      "inspection",
+  const previousInspection = usesPreviousInspection(d, month);
+  const inspectionVersions = sel.filter((version) =>
+    d.documents.some((doc) => doc.id === version.document_id && doc.role === "inspection"),
   );
-  const hasMonthInspection =
-    !month ||
-    sel.some((v) => {
-      if (
-        d.documents.find((doc) => doc.id === v.document_id)?.role !==
-        "inspection"
-      )
-        return false;
-      const from = (v.period_start || v.period_end || v.issued_on)?.slice(0, 7);
-      const to = (v.period_end || v.period_start || v.issued_on)?.slice(0, 7);
-      return !!from && !!to && from <= month && to >= month;
-    });
-  const valid =
-    sel.length >= 2 && sel.length <= 10 && hasInspection && hasMonthInspection;
+  const hasRequiredReport = inspectionVersions.length > 0 && (
+    !month || inspectionMonths(d.documents, inspectionVersions).includes(month) ||
+    (previousInspection && inspectionVersions.some((version) => version.case_id === d.case.follow_up_of))
+  );
+  const valid = sel.length >= 2 && sel.length <= 10 && hasRequiredReport;
   const availableIds = new Set(latest(d.versions));
-  const months = inspectionMonths(d.documents, d.versions);
+  const months = verificationMonthOptions(d);
   const choices = d.versions.filter(
     (v) => selected.includes(v.id) || availableIds.has(v.id),
   );
@@ -321,22 +295,24 @@ export function Documents({
           </span>
           <h2>Verify evidence</h2>
           <p>
-            Compare the selected records and review the source passage behind
-            each flag.
+            {d.case.follow_up_of
+              ? "For a documentary follow-up, verify the preceding inspection report and its supporting records. You can prepare this event’s report after reviewing the flags."
+              : "Compare the selected records and review the source passage behind each flag."}
           </p>
+          {d.case.follow_up_of && (!previousInspection || custom) && (
+            <button onClick={() => void chooseMonth(scheduledMonth)} disabled={!writable || busy}>
+              Use previous inspection’s records
+            </button>
+          )}
           <div className="verification-month">
             <label htmlFor="verification-month">Verification month</label>
             <select
               id="verification-month"
               value={month}
-              disabled={!writable || busy || months.length === 0}
+              disabled={!writable || busy}
               onChange={(event) => void chooseMonth(event.target.value)}
             >
-              <option value="">
-                {months.length
-                  ? "Choose inspection month"
-                  : "No inspection months available"}
-              </option>
+              {!scheduledMonth && <option value="">All available records</option>}
               {months.map((value) => (
                 <option key={value} value={value}>
                   {new Intl.DateTimeFormat("en", {
@@ -349,15 +325,10 @@ export function Documents({
             </select>
           </div>
           <p className="hint">
-            Only months covered by a processed inspection report are available.
+            {previousInspection
+              ? "This is the scheduled follow-up month. The previous inspection’s processed records are selected by default."
+              : "Select a month to find records that cover it. You can adjust the document selection below."}
           </p>
-          {month && (
-            <p className="hint">
-              Includes this month’s records and ready documents from earlier
-              inspections in this follow-up series. Check for missing records
-              and adjust the selection below.
-            </p>
-          )}
           <details
             className="verification-selection"
             open={selectionOpen}
@@ -437,8 +408,10 @@ export function Documents({
           )}
           {!valid && (
             <p className="hint">
-              {!hasMonthInspection
-                ? "Add or select an inspection report covering this month."
+              {!hasRequiredReport
+                ? previousInspection
+                  ? "Select the processed report from the previous inspection or one covering this month."
+                  : "Add or select an inspection report covering this month."
                 : sel.length > 10
                   ? "Select up to 10 documents for one verification run."
                   : "Select an inspection and at least one other document."}

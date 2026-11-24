@@ -20,6 +20,7 @@ from .accounts import account_router
 from .ai import Gemini
 from .config import JOB_FIELDS, settings
 from .document_metadata import extract_cap_submission_deadline, extract_metadata
+from .documentary_report import original_statement
 from .document_duplicates import content_fingerprint, duplicate_candidate
 from .document_validation import (
     classify_factory_record_content,
@@ -38,6 +39,7 @@ from .models import (
     UploadTicket,
 )
 from .platform import Platform, PlatformError
+from .verify import finding_reference, iso
 from .worker import isolated_pdf, loop
 
 cfg = settings()
@@ -1223,18 +1225,61 @@ async def review(rid: UUID, body: ReviewInput, u: User = Depends(user), d=Depend
 
 
 @app.get("/v1/runs/{rid}/report")
-async def report(rid: UUID, u: User = Depends(user), d=Depends(db)):
+async def report(rid: UUID, follow_up: bool = False, u: User = Depends(user), d=Depends(db)):
     run = await d.one("verification_runs", rid, token=u.token)
     if run["status"] not in ("complete", "partial"):
         raise HTTPException(409, "This analysis is still incomplete.")
-    return {
-        "case": await d.one("cases", run["case_id"], token=u.token),
+    case = await d.one("cases", run["case_id"], token=u.token)
+    rows = await ranked_results(run, u, d)
+    report_data = {
+        "case": case,
         "run": run,
-        "results": await ranked_results(run, u, d),
+        "results": rows,
         "cap_reviews": await cap_events(run["id"], u, d)
         if run["cap_analysis"] is not None
         else [],
     }
+    if follow_up:
+        report_data["follow_up_entries"] = await follow_up_report_entries(case, run, rows, u, d)
+    return report_data
+
+
+async def follow_up_report_entries(case, run, rows, u, d):
+    parent = case.get("follow_up_of")
+    if u.role != "reviewer" or case.get("reviewer_id") != u.id:
+        raise HTTPException(403, "Only the assigned reviewer can prepare this inspection report.")
+    if not parent or case["archived"] or case["deleting"] or not case.get("inspection_on"):
+        raise HTTPException(409, "Choose an active scheduled follow-up inspection.")
+    manifest = {version["id"]: version for version in run["manifest"]}
+    versions = await d.rows(
+        "document_versions", token=u.token, fields="id",
+        filters={"case_id": "eq." + parent, "id": "in.(" + ",".join(manifest) + ")"},
+    )
+    if {version["id"] for version in versions} != set(manifest) or not any(
+        version["role"] == "inspection" for version in manifest.values()
+    ) or not any(version["role"] != "inspection" for version in manifest.values()):
+        raise HTTPException(409, "Run verification on the previous inspection report and its supporting records to prepare this follow-up.")
+
+    entries = {}
+    for row in rows:
+        claim = row["claim"]
+        if row["outcome"] == "supported":
+            continue
+        source = claim["source"]
+        reference = finding_reference(source["quote"]) if claim["kind"] == "finding" else None
+        text = " ".join(original_statement(source["quote"]).split())
+        text = text.replace("[End review entry]", "(end review entry)")
+        version = manifest[source["version_id"]]
+        start = iso(claim.get("start_date") or version.get("period_start"))
+        end = iso(claim.get("end_date") or version.get("period_end"))
+        kind = claim["kind"]
+        period = f"{start or end} to {end or start}" if kind == "claim" and (start or end) else None
+        entries.setdefault((kind, reference, text), {
+            "kind": kind,
+            "finding_id": reference.upper() if reference else None,
+            "statement": text, "period": period, "source": source,
+        })
+    return list(entries.values())
 
 
 async def cap_events(rid, u, d):

@@ -1,4 +1,25 @@
-import type { Result, Run } from "./api";
+import type { CapAnalysis, CapReview, Result, Run } from "./api";
+
+export function capFindingLinks(analysis: CapAnalysis, reviews: CapReview[], findingId: string) {
+  const suggestions = new Map(analysis.suggestions
+    .filter((suggestion) => suggestion.finding_id === findingId)
+    .map((suggestion) => [suggestion.action_id, suggestion]));
+  const decisions = new Map(reviews
+    .filter((review) => review.finding_id === findingId)
+    .map((review) => [review.action_id, review]));
+  return analysis.actions.flatMap((action) => {
+    const suggestion = suggestions.get(action.id);
+    const review = decisions.get(action.id);
+    return suggestion || review ? [{ action, suggestion, review }] : [];
+  });
+}
+
+export function capLinkStatus({ suggestion, review }: ReturnType<typeof capFindingLinks>[number]) {
+  if (review) return review.decision === "confirm" ? "Link confirmed" : "Link dismissed";
+  if (suggestion?.basis === "explicit_reference_conflict") return "FI reference · check mismatch";
+  if (suggestion?.basis === "explicit_reference") return "Explicit reference";
+  return "Possible match";
+}
 
 export function lastReviewAction(result: Result) {
   return result.reviews.findLast((event) => event.action !== "comment");

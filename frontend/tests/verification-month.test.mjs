@@ -3,6 +3,8 @@ import test from "node:test";
 import {
   documentsForMonth,
   inspectionMonths,
+  verificationMonthOptions,
+  verificationSelection,
 } from "../lib/verification-month.ts";
 
 function record(id, role, from, to = from, extra = {}) {
@@ -146,4 +148,22 @@ test("scheduled inspection includes its CAP even when the factory issues it next
     documentsForMonth(documents, versions, "2026-09", "2026-09-24").sort(),
     ["report-v1", "response-v1"],
   );
+});
+
+test("a September follow-up offers all twelve months and defaults to its direct predecessor's records", () => {
+  const files = [
+    record("july", "inspection", "2026-07-15", "2026-07-15", { case_id: "july" }),
+    record("august", "inspection", "2026-08-18", "2026-08-18", { case_id: "august" }),
+    record("august-cap", "cap", null, null, { case_id: "august", issued_on: "2026-09-02" }),
+  ];
+  const dossier = {
+    case: { inspection_on: "2026-09-08", follow_up_of: "august" },
+    documents: files.map(({ document }) => document),
+    versions: files.map(({ version }) => version),
+    prior_case_ids: ["july", "august"],
+  };
+  assert.deepEqual(verificationMonthOptions(dossier), Array.from({ length: 12 }, (_, i) => `2026-${String(i + 1).padStart(2, "0")}`));
+  assert.deepEqual(verificationSelection(dossier, "2026-09"), ["august-v1", "august-cap-v1"]);
+  assert.deepEqual(verificationSelection(dossier, "2026-10"), []);
+  assert.deepEqual(verificationSelection(dossier, "2026-07"), ["july-v1"]);
 });

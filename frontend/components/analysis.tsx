@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowRight,
@@ -22,9 +23,9 @@ import {
   message,
   outcomes,
 } from "@/lib/api";
-import { reviewStatus } from "@/lib/review";
+import { capFindingLinks, capLinkStatus, lastReviewAction, reviewStatus } from "@/lib/review";
 import { Preview } from "./viewer";
-import { Busy, ErrorNote, Tag } from "./ui";
+import { Busy, ErrorNote, Modal, Tag } from "./ui";
 import { JobRow } from "./documents";
 
 type Props = {
@@ -33,6 +34,7 @@ type Props = {
   runId: string | null;
   itemId: string | null;
   go: (run: string, item?: string) => void;
+  openCap: (run: string, finding: string) => void;
   preview: (item: Preview) => void;
   refresh: () => Promise<void>;
 };
@@ -40,6 +42,7 @@ type PrintableReport = {
   results: Result[];
   run: Run & { cap_analysis?: CapAnalysis | null };
   cap_reviews: CapReview[];
+  follow_up_entries?: { kind: string; finding_id: string | null; statement: string; period: string | null; source: Ref }[];
 };
 const tone: Record<Outcome, string> = {
   contradicted: "red",
@@ -54,6 +57,11 @@ const decisions: Record<Action, string> = {
   dismiss: "Dismiss flag",
   request_evidence: "Request evidence",
   comment: "Add comment",
+};
+const recordedDecisions = {
+  ...decisions,
+  accept: "Flag accepted",
+  dismiss: "Flag dismissed",
 };
 
 function plainResult(outcome: Outcome) {
@@ -84,20 +92,22 @@ function citation(ref: Ref, heading: string, preview: (item: Preview) => void) {
     <article className="source-card">
       <h3>{heading}</h3>
       <blockquote dir="auto">{ref.quote}</blockquote>
-      <button
-        onClick={() =>
-          preview({ version: ref.version_id, title: ref.document, anchor: ref })
-        }
-      >
-        <FileText size={16} />
-        {ref.document} · p. {ref.page}
-        <ArrowRight size={14} />
-      </button>
+      {sourceButton(ref, preview)}
       <small>
         Revision {ref.revision} ·{" "}
         {ref.method === "ocr" ? "OCR transcription" : "PDF text"}
       </small>
     </article>
+  );
+}
+
+function sourceButton(ref: Ref, preview: (item: Preview) => void) {
+  return (
+    <button onClick={() => preview({ version: ref.version_id, title: ref.document, anchor: ref })}>
+      <FileText size={16} />
+      {ref.document} · p. {ref.page}
+      <ArrowRight size={14} />
+    </button>
   );
 }
 
@@ -107,6 +117,7 @@ export function Analysis({
   runId,
   itemId,
   go,
+  openCap,
   preview,
   refresh,
 }: Props) {
@@ -117,11 +128,20 @@ export function Analysis({
     queryFn: () => api<Result[]>("/v1/runs/" + run.id + "/results", token),
     enabled: !!readable,
   });
+  const hasCap = !!run?.manifest.some((document) => document.role === "cap");
+  const cap = useQuery({
+    queryKey: ["cap", run?.id],
+    queryFn: () => api<{ analysis: CapAnalysis | null; reviews: CapReview[] }>(`/v1/runs/${run.id}/cap`, token),
+    enabled: !!readable && hasCap && !!results.data?.some((row) => row.claim.kind === "finding"),
+  });
   const [filter, setFilter] = useState("all");
   const [reviewFilter, setReviewFilter] = useState("all");
   const [severity, setSeverity] = useState("all");
   const [error, setError] = useState("");
   const [printData, setPrintData] = useState<PrintableReport | null>(null);
+  const [showFollowUp, setShowFollowUp] = useState(false);
+  const [followUpNotes, setFollowUpNotes] = useState("");
+  const [preparingReport, setPreparingReport] = useState(false);
   const job = d.jobs.find((j) => j.run_id === run?.id);
   const writable =
     d.role === "reviewer" && !d.case.archived && !d.case.deleting;
@@ -146,22 +166,24 @@ export function Analysis({
       setError(message(e));
     }
   }
-  async function printReport() {
+  async function printReport(followUp = false) {
     setError("");
+    setPreparingReport(true);
     try {
       const report = await api<PrintableReport>(
-        "/v1/runs/" + run.id + "/report",
+        "/v1/runs/" + run.id + "/report" + (followUp ? "?follow_up=true" : ""),
         token,
       );
       setPrintData(report);
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => {
-          window.print();
-          setPrintData(null);
-        }),
-      );
+      setShowFollowUp(false);
+      await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+      await document.fonts.ready;
+      window.print();
     } catch (e) {
       setError(message(e));
+    } finally {
+      setPreparingReport(false);
+      setPrintData(null);
     }
   }
   if (!run)
@@ -190,11 +212,16 @@ export function Analysis({
             </Tag>
             {readable && (
               <button
-                disabled={!results.isSuccess}
+                disabled={!results.isSuccess || preparingReport}
                 onClick={() => void printReport()}
               >
                 <Printer size={16} />
                 Print review
+              </button>
+            )}
+            {readable && writable && d.case.follow_up_of && (
+              <button className="primary" disabled={!results.isSuccess || preparingReport} onClick={() => setShowFollowUp(true)}>
+                <FileText size={16} /> Prepare follow-up report
               </button>
             )}
           </div>
@@ -330,29 +357,101 @@ export function Analysis({
           token={token}
           writable={writable}
           preview={preview}
-          saved={() => void results.refetch()}
+          capMatching={row.claim.kind === "finding" ? (
+            <CapMatching
+              analysis={cap.data?.analysis}
+              reviews={cap.data?.reviews ?? []}
+              hasCap={hasCap}
+              pending={cap.isPending}
+              failed={cap.isError}
+              findingId={row.id}
+              preview={preview}
+              open={() => openCap(run.id, row.id)}
+            />
+          ) : undefined}
+          saved={() => results.refetch()}
         />
       ))}
-      {printData && <PrintSheet dossier={d} report={printData} />}
+      {showFollowUp && (
+        <Modal title="Prepare documentary follow-up report" close={() => setShowFollowUp(false)}>
+          <p>Inspection date {dateText(d.case.inspection_on)}. The report includes the saved decisions, notes and source citations from this run.</p>
+          <label>
+            Follow-up summary
+            <textarea dir="auto" rows={5} maxLength={3000} value={followUpNotes} onChange={(event) => setFollowUpNotes(event.target.value)} />
+          </label>
+          <p>Choose Save as PDF in the print dialog, then upload the file in this event’s Documents tab.</p>
+          {error && <ErrorNote text={error} />}
+          <button className="primary" disabled={preparingReport} onClick={() => void printReport(true)}>
+            <Printer size={16} /> Generate follow-up PDF
+          </button>
+        </Modal>
+      )}
+      {printData && createPortal(
+        <PrintSheet dossier={d} report={printData} followUpNotes={followUpNotes} />,
+        document.body,
+      )}
     </>
   );
 }
+
+function CapMatching({ analysis, reviews, hasCap, pending, failed, findingId, preview, open }: {
+  analysis: CapAnalysis | null | undefined;
+  reviews: CapReview[];
+  hasCap: boolean;
+  pending: boolean;
+  failed: boolean;
+  findingId: string;
+  preview: (item: Preview) => void;
+  open: () => void;
+}) {
+  const links = analysis ? capFindingLinks(analysis, reviews, findingId) : [];
+  return (
+    <article className="source-card">
+      <h3>CAP matching</h3>
+      {!hasCap ? <p>No corrective action plan was included in this run.</p>
+        : pending ? <p role="status">Loading CAP matches…</p>
+        : failed || !analysis ? <p>CAP matching is unavailable for this run.</p>
+        : !links.length ? (
+          <p>{analysis.coverage.complete
+            ? "No matching CAP action was found for this finding."
+            : "CAP coverage is incomplete. Review the source plan for possible matches."}</p>
+        ) : links.map((link) => (
+          <section key={link.action.id} className="cap-action">
+            <div className="inline-actions">
+              {link.action.action_ref && <strong>{link.action.action_ref}</strong>}
+              <Tag>{capLinkStatus(link)}</Tag>
+            </div>
+            <blockquote dir="auto">{link.action.source.quote}</blockquote>
+            {link.action.reported_status && <p>Status reported by the factory · {link.action.reported_status}</p>}
+            {sourceButton(link.action.source, preview)}
+          </section>
+        ))}
+      {hasCap && <button onClick={open}>Open CAP matching <ArrowRight size={14} /></button>}
+    </article>
+  );
+}
+
 function Detail({
   r,
   token,
   writable,
   preview,
+  capMatching,
   saved,
 }: {
   r: Result;
   token: string;
   writable: boolean;
   preview: (p: Preview) => void;
-  saved: () => void;
+  capMatching?: React.ReactNode;
+  saved: () => Promise<unknown>;
 }) {
   const [note, setNote] = useState(""),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
+  const [editingDecision, setEditingDecision] = useState(false);
+  const decision = lastReviewAction(r)?.action;
+  const decided = decision === "accept" || decision === "dismiss";
   async function record(action: Action) {
     setBusy(true);
     setError("");
@@ -362,7 +461,8 @@ function Detail({
         comment: note,
       });
       setNote("");
-      saved();
+      await saved();
+      setEditingDecision(false);
     } catch (e) {
       setError(message(e));
     } finally {
@@ -375,7 +475,7 @@ function Detail({
       id={`assessment-detail-${r.id}`}
       aria-label={`Source comparison: ${r.claim.source.quote}`}
       tabIndex={-1}
-      style={{ scrollMarginTop: "1.5rem" }}
+      style={{ scrollMarginTop: "5rem" }}
     >
       <div className="section-head">
         <div>
@@ -386,20 +486,20 @@ function Detail({
       </div>
       <div className="comparison">
         {citation(r.claim.source, "Inspection statement", preview)}
-        {r.evidence.length ? (
-          r.evidence.map((ref, i) => (
+        <div className="comparison-sources">
+          {capMatching}
+          {r.evidence.map((ref, i) => (
             <div key={ref.chunk_id + "-" + i}>
-              {citation(ref, "Retrieved evidence", preview)}
+              {citation(ref, capMatching ? "Closure evidence" : "Retrieved evidence", preview)}
             </div>
-          ))
-        ) : (
-          <div className="source-card">
-            <h3>Retrieved evidence</h3>
-            <p>
-              No source quotation was published for this side of the comparison.
-            </p>
-          </div>
-        )}
+          ))}
+          {!capMatching && !r.evidence.length && (
+            <div className="source-card">
+              <h3>Retrieved evidence</h3>
+              <p>No source quotation was published for this side of the comparison.</p>
+            </div>
+          )}
+        </div>
       </div>
       <details className="coverage">
         <summary><span>Evidence coverage and verification checks</span></summary>
@@ -434,7 +534,7 @@ function Detail({
         {r.reviews.length ? (
           r.reviews.map((ev) => (
             <div className="review-note" key={ev.id}>
-              <b>{decisions[ev.action as Action] || ev.action}</b>
+              <b>{recordedDecisions[ev.action as Action] || ev.action}</b>
               <small>
                 {dateText(ev.created_at)} · {ev.actor || "Deleted account"}
               </small>
@@ -444,8 +544,18 @@ function Detail({
         ) : (
           <p className="muted review-awaiting">Awaiting reviewer decision.</p>
         )}
-        {writable && (
-          <>
+        {writable && decided && (
+          <button
+            disabled={busy}
+            aria-expanded={editingDecision}
+            aria-controls={`review-editor-${r.id}`}
+            onClick={() => setEditingDecision(!editingDecision)}
+          >
+            {editingDecision ? "Cancel edit" : "Edit review"}
+          </button>
+        )}
+        {writable && (!decided || editingDecision) && (
+          <div id={`review-editor-${r.id}`}>
             <label>
               Review note
               <textarea
@@ -473,7 +583,7 @@ function Detail({
                 </button>
               ))}
             </div>
-          </>
+          </div>
         )}
       </div>
     </section>
@@ -482,22 +592,52 @@ function Detail({
 function PrintSheet({
   dossier: d,
   report,
+  followUpNotes,
 }: {
   dossier: Dossier;
   report: PrintableReport;
+  followUpNotes: string;
 }) {
-  const { run, results: rows, cap_reviews: capReviews } = report;
+  const { run, results: rows, cap_reviews: capReviews, follow_up_entries: entries } = report;
   return (
     <article className="print-sheet">
-      <h1>{d.case.title}</h1>
-      <p>
-        {d.case.factory} · {dateText(run.created_at)} · {run.status}
-      </p>
-      <p>
-        Documentary evidence review. Physical safety and formal closure require
-        the appropriate inspection authority.
-      </p>
-      <h2>Sources</h2>
+      {entries ? (
+        <>
+          <h1>Documentary follow-up inspection report</h1>
+          <p>Review method: documentary review only</p>
+          <p>Inspection date: {d.case.inspection_on}</p>
+          <p>Factory: {d.case.factory}</p>
+          <p>{d.case.title} · Analysis {run.status}</p>
+          <p>This report records the reviewer’s documentary assessment. A carried finding describes a previously reported condition. Physical safety and formal closure require independent inspection evidence.</p>
+          <h2>Carry-forward register</h2>
+          {!entries.length && <p>No findings or flagged claims were carried forward from this review.</p>}
+          {entries.map((entry) => (
+            <div className="print-register-entry" key={`${entry.source.page_id}/${entry.source.start}`}>
+              <p className="print-entry-marker">
+                Carry-forward {entry.kind}{entry.finding_id ? ` ${entry.finding_id}` : ""}:
+                {entry.period && <> [Period {entry.period}]</>}
+              </p>
+              <p dir="auto">{entry.statement}</p>
+              <small>[End review entry]</small>
+              <small>{entry.source.document} · revision {entry.source.revision} · page {entry.source.page}</small>
+            </div>
+          ))}
+          <small>End of carry-forward register</small>
+          {followUpNotes.trim() && (
+            <>
+              <h2>Reviewer summary</h2>
+              <blockquote dir="auto">{followUpNotes.trim()}</blockquote>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          <h1>{d.case.title}</h1>
+          <p>{d.case.factory} · {dateText(run.created_at)} · {run.status}</p>
+          <p>Documentary evidence review. Physical safety and formal closure require the appropriate inspection authority.</p>
+        </>
+      )}
+      <h2>{entries ? "Sources reviewed" : "Sources"}</h2>
       <ul>
         {run.manifest.map((v) => (
           <li key={v.id}>
@@ -548,9 +688,10 @@ function PrintSheet({
               : ""}.
           </p>
           {r.reviews.map((e) => (
-            <p key={e.id}>
-              {e.action} · {dateText(e.created_at)} · {e.actor || "Deleted account"} {e.comment}
-            </p>
+            <div key={e.id}>
+              <p>{decisions[e.action as Action] || e.action} · {dateText(e.created_at)}</p>
+              {e.comment && <blockquote dir="auto">{e.comment}</blockquote>}
+            </div>
           ))}
         </section>
       ))}

@@ -9,6 +9,7 @@ from collections import defaultdict
 from pathlib import Path
 from uuid import UUID, uuid5
 from .config import PARSER
+from .documentary_report import is_document_review
 
 
 def chunks_for(page, version_id):
@@ -98,6 +99,24 @@ def scan_lines(pdf, index, lang_path):
     return lines, ("readable" if conf and sum(conf) / len(conf) >= 60 else "uncertain")
 
 
+def recover_bangla_lines(lines, scanned):
+    """Recover shaped Bangla from the rendered page while preserving PDF labels."""
+    result = []
+    for text, box in lines:
+        if re.search(r"[\u0980-\u09ff]", text):
+            x, y, right, bottom = box
+            matches = [
+                (replacement, coordinates) for replacement, coordinates in scanned
+                if re.search(r"[\u0980-\u09ff]", replacement)
+                and min(right, coordinates[2]) > max(x, coordinates[0])
+                and y <= (coordinates[1] + coordinates[3]) / 2 <= bottom
+            ]
+            if matches:
+                text = " ".join(value for value, _ in sorted(matches, key=lambda pair: pair[1][0]))
+        result.append((text.replace("\x00", ""), box))
+    return result
+
+
 def parse_pdf(data, version_id, tessdata, offset=0, batch_size=None):
     import pdfplumber
     import pypdfium2 as pdfium
@@ -118,10 +137,13 @@ def parse_pdf(data, version_id, tessdata, offset=0, batch_size=None):
                 if batch_size is None
                 else min(total_pages, offset + batch_size)
             )
+            first_lines = native_lines(doc.pages[0])
+            first_page_text = "\n".join(text for text, _ in first_lines)
+            documentary = is_document_review({"text": first_page_text})
             for i in range(offset, end):
                 page = doc.pages[i]
                 method, quality = "native", "readable"
-                lines = native_lines(page)
+                lines = first_lines if i == 0 else native_lines(page)
                 text = " ".join(t for t, _ in lines)
                 has_scan = any(
                     max(0, image["x1"] - image["x0"])
@@ -144,6 +166,14 @@ def parse_pdf(data, version_id, tessdata, offset=0, batch_size=None):
                             "English and Bangla OCR language data are required. Install them and retry."
                         )
                     lines, quality = scan_lines(pdf, i, tessdata)
+                elif documentary and re.search(r"[\u0980-\u09ff]", text) and all(
+                    (Path(tessdata) / (lang + ".traineddata")).is_file()
+                    for lang in ("eng", "ben")
+                ):
+                    scanned, scan_quality = scan_lines(pdf, i, tessdata)
+                    if scan_quality == "readable":
+                        lines = recover_bangla_lines(lines, scanned)
+                        method = "ocr"
                 blocks, parts, text_offset = [], [], 0
                 for t, box in lines:
                     t = t.strip()

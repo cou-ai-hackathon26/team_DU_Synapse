@@ -3,6 +3,8 @@
 import re
 from datetime import datetime
 
+from .documentary_report import is_document_review
+
 
 DATE_TOKEN = re.compile(
     r"\d{4}[-/.]\d{1,2}[-/.]\d{1,2}"
@@ -103,7 +105,10 @@ def extract_metadata(pages, filename, scheduled_date=None):
         r"[-_]+", " ", ("\n".join(lines[:18]) + "\n" + filename).lower()
     )
 
-    if re.search(
+    documentary = bool(pages) and is_document_review(pages[0])
+    if documentary:
+        role = "inspection"
+    elif re.search(
         r"\b(corrective action plan|\bcap[-\s]?(?:\d|:)|cap status)\b", header
     ):
         role = "cap"
@@ -194,6 +199,8 @@ def extract_metadata(pages, filename, scheduled_date=None):
                 period_end = period_end or end
                 if period_start or period_end:
                     break
+    if documentary:
+        period_start = period_end = inspection_date
 
     title_pattern = re.compile(
         r"(?:document\s+title|report\s+title|document\s+name|title)\s*[:–—-]\s*",

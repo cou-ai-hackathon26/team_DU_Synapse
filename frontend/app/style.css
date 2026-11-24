@@ -912,6 +912,15 @@ summary {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 13px;
 }
+.comparison-sources {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  min-width: 0;
+}
+.comparison-sources .source-card {
+  height: auto;
+}
 .source-card {
   height: 100%;
   border: 1px solid var(--line);
@@ -1464,6 +1473,15 @@ input[type="checkbox"] {
   }
 }
 @media print {
+  body:has(> .print-sheet) > :not(.print-sheet) {
+    display: none !important;
+  }
+  html:has(body > .print-sheet),
+  body:has(> .print-sheet) {
+    min-height: 0;
+    background: white;
+    color: #111;
+  }
   .sidebar,
   .topbar,
   .app-foot,
@@ -1480,7 +1498,10 @@ input[type="checkbox"] {
   .print-sheet {
     display: block;
     color: #111;
+    font-size: 11pt;
   }
+  .print-sheet h1 { font-size: 19pt; }
+  .print-sheet h2 { font-size: 13pt; }
   .print-sheet section {
     break-inside: avoid;
     margin-top: 10px;
@@ -1489,6 +1510,16 @@ input[type="checkbox"] {
   .print-sheet .print-result {
     break-inside: auto;
     padding: 10px 0 14px;
+  }
+  .print-sheet .print-register-entry {
+    break-inside: avoid;
+    margin-bottom: 12px;
+  }
+  .print-sheet .print-register-entry p {
+    margin-bottom: 2px;
+  }
+  .print-sheet .print-entry-marker {
+    white-space: nowrap;
   }
   .print-sheet .print-result h2 {
     margin-bottom: 4px;
@@ -1613,6 +1644,9 @@ input[type="checkbox"] {
   border-radius: 9px;
   display: grid;
   gap: 8px;
+}
+.source-card > .cap-action {
+  margin: 10px 0 12px;
 }
 .reference-id {
   font: inherit;
