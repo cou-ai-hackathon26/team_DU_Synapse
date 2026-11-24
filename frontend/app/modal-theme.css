@@ -1,0 +1,48 @@
+/* Native dialogs enter the top layer but still need their own semantic palette.
+   Define it here too so dialogs mounted outside the workspace inherit correctly. */
+dialog.modal {
+  --ink: var(--sp-text);
+  --muted: var(--sp-muted);
+  --line: var(--sp-line);
+  --white: var(--sp-surface);
+  --shadow: var(--sp-shadow);
+  background: var(--sp-surface);
+  color: var(--sp-text);
+  border-color: var(--sp-line);
+  color-scheme: light;
+}
+:root[data-theme="dark"] .modal { color-scheme: dark; }
+.modal :is(input:not([type="checkbox"]), select, textarea) {
+  background: var(--sp-surface);
+  color: var(--sp-text);
+  border-color: var(--sp-line);
+}
+.modal input[readonly] { background: var(--sp-surface-soft); }
+.modal :is(input, textarea)::placeholder { color: var(--sp-muted); opacity: 1; }
+.modal :is(button:not([class]), .icon-button) {
+  background: var(--sp-surface);
+  color: var(--sp-text);
+  border-color: var(--sp-line);
+}
+.modal :is(button:not([class]), .icon-button):hover { background: var(--sp-surface-soft); }
+.modal button.primary { background: #224c3e; color: #fff; border-color: #224c3e; }
+.modal button.primary:hover { background: #173b2f; }
+.modal button.danger { background: #a33135; color: #fff; border-color: #a33135; }
+.modal :is(.panel, .id-card-review, .source-card, .upload-box) {
+  background: var(--sp-surface-soft);
+  color: var(--sp-text);
+  border-color: var(--sp-line);
+}
+/* Intentionally pale status surfaces retain dark text in either theme. */
+.modal .id-card-check.ok span { color: #275842; }
+.modal .id-card-check.warn span { color: #7a531b; }
+.modal-inner p.notice { color: #385d49; }
+.modal .error-text { background: #fcebea; }
+.modal .icon-button.danger-icon { color: #a9333b; }
+:root[data-theme="dark"] .modal .icon-button.danger-icon { color: #ffabb2; }
+.modal .icon-button.danger-icon:hover { background: #fff0f1; color: #8e1f28; }
+/* Popovers and neutral information panels share the same surface/foreground pair. */
+:is(.account-popover, .unified-app-shell .notification-popover, .unified-app-shell .panel) {
+  background: var(--sp-surface);
+  color: var(--sp-text);
+}

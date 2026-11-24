@@ -1,0 +1,2918 @@
+[
+  {
+    "id": "01-1-contradicted",
+    "family": "lighting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 01",
+    "category": "contradicted",
+    "expected": "contradicted",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No workplace injuries occurred from 1 to 28 February 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১২ ফেব্রুয়ারি ২০২৬ একজন শ্রমিক আহত হন।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "external",
+        "lines": [
+          "No workplace injuries occurred from 1 to 28 February 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "factory",
+        "lines": [
+          "১২ ফেব্রুয়ারি ২০২৬ একজন শ্রমিক আহত হন।"
+        ],
+        "scan": true
+      },
+      {
+        "role": "incident",
+        "title": "Prior period extract",
+        "filename": "prior-period-extract.pdf",
+        "issued_on": "2026-01-28",
+        "period_start": "2026-01-01",
+        "period_end": "2026-01-28",
+        "issuer": "factory",
+        "lines": [
+          "The previous month's injury total was zero."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "01-1-unsupported",
+    "family": "lighting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 01",
+    "category": "unsupported",
+    "expected": "unsupported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "An evacuation drill was completed every week from 1 to 28 February 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "external",
+        "lines": [
+          "An evacuation drill was completed every week from 1 to 28 February 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "sop",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "factory",
+        "lines": [
+          "Procedure: schedule a drill every week and keep records for the lighting review."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "01-1-unresolved",
+    "family": "lighting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 01",
+    "category": "unresolved",
+    "expected": "unresolved",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Exit EX-12 was blocked in Building A on 12 February 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "external",
+        "lines": [
+          "Exit EX-12 was blocked in Building A on 12 February 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "factory",
+        "lines": [
+          "Factory maintenance reported clearing EX-12. Follow-up inspection is pending."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "01-1-supported",
+    "family": "lighting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 01",
+    "category": "supported",
+    "expected": "supported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Emergency alarms in Building A were tested on 12 February 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১২ ফেব্রুয়ারি ২০২৬: ভবন এ-তে জরুরি সংকেত পরীক্ষা সম্পন্ন হয়।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "external",
+        "lines": [
+          "Emergency alarms in Building A were tested on 12 February 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "factory",
+        "lines": [
+          "১২ ফেব্রুয়ারি ২০২৬: ভবন এ-তে জরুরি সংকেত পরীক্ষা সম্পন্ন হয়।"
+        ],
+        "scan": true
+      },
+      {
+        "role": "maintenance",
+        "title": "Prior period extract",
+        "filename": "prior-period-extract.pdf",
+        "issued_on": "2026-01-28",
+        "period_start": "2026-01-01",
+        "period_end": "2026-01-28",
+        "issuer": "factory",
+        "lines": [
+          "The alarm test failed in Building B during the previous reporting period."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "01-1-needs_review",
+    "family": "lighting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 01",
+    "category": "needs_review",
+    "expected": "needs_review",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No injuries in Building A were reported from 1 to 28 February 2026."
+    },
+    "acceptable": [
+      "needs_review",
+      "not_assessed"
+    ],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "external",
+        "lines": [
+          "No injuries in Building A were reported from 1 to 28 February 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "factory",
+        "lines": [
+          "An injury was logged on 12 February 2026. Allocation to building and unit is unknown."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "01-2-contradicted",
+    "family": "lighting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 01",
+    "category": "contradicted",
+    "expected": "contradicted",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No workplace injuries occurred from 1 to 28 February 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১৩ ফেব্রুয়ারি ২০২৬ একজন শ্রমিক আহত হন।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "external",
+        "lines": [
+          "No workplace injuries occurred from 1 to 28 February 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "factory",
+        "lines": [
+          "১৩ ফেব্রুয়ারি ২০২৬ একজন শ্রমিক আহত হন।"
+        ],
+        "scan": true
+      }
+    ]
+  },
+  {
+    "id": "01-2-unsupported",
+    "family": "lighting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 01",
+    "category": "unsupported",
+    "expected": "unsupported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "An evacuation drill was completed every week from 1 to 28 February 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "external",
+        "lines": [
+          "An evacuation drill was completed every week from 1 to 28 February 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "sop",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "factory",
+        "lines": [
+          "Procedure: schedule a drill every week and keep records for the lighting review."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "01-2-unresolved",
+    "family": "lighting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 01",
+    "category": "unresolved",
+    "expected": "unresolved",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Exit EX-12 was blocked in Building B on 13 February 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "external",
+        "lines": [
+          "Exit EX-12 was blocked in Building B on 13 February 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "factory",
+        "lines": [
+          "Factory issued a plan to clear EX-12 in Building B. Correction was not verified."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "01-2-supported",
+    "family": "lighting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 01",
+    "category": "supported",
+    "expected": "supported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Emergency alarms in Building B were tested on 13 February 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "13 February 2026: alarm test completed in Building B. Operator signed the test register."
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "external",
+        "lines": [
+          "Emergency alarms in Building B were tested on 13 February 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "factory",
+        "lines": [
+          "13 February 2026: alarm test completed in Building B. Operator signed the test register."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "01-2-needs_review",
+    "family": "lighting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 01",
+    "category": "needs_review",
+    "expected": "needs_review",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No injuries in Building B were reported from 1 to 28 February 2026."
+    },
+    "acceptable": [
+      "needs_review",
+      "not_assessed"
+    ],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "external",
+        "lines": [
+          "No injuries in Building B were reported from 1 to 28 February 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "factory",
+        "lines": [
+          "An injury was logged on 13 February 2026. Allocation to building and unit is unknown."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "02-1-contradicted",
+    "family": "exits",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 02",
+    "category": "contradicted",
+    "expected": "contradicted",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No workplace injuries occurred from 1 to 28 March 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১২ মার্চ ২০২৬ একজন শ্রমিক আহত হন।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "external",
+        "lines": [
+          "No workplace injuries occurred from 1 to 28 March 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "factory",
+        "lines": [
+          "১২ মার্চ ২০২৬ একজন শ্রমিক আহত হন।"
+        ],
+        "scan": true
+      },
+      {
+        "role": "incident",
+        "title": "Prior period extract",
+        "filename": "prior-period-extract.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "factory",
+        "lines": [
+          "The previous month's injury total was zero."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "02-1-unsupported",
+    "family": "exits",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 02",
+    "category": "unsupported",
+    "expected": "unsupported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "An evacuation drill was completed every week from 1 to 28 March 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "external",
+        "lines": [
+          "An evacuation drill was completed every week from 1 to 28 March 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "sop",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "factory",
+        "lines": [
+          "Procedure: schedule a drill every week and keep records for the exits review."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "02-1-unresolved",
+    "family": "exits",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 02",
+    "category": "unresolved",
+    "expected": "unresolved",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Exit EX-13 was blocked in Building A on 12 March 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "external",
+        "lines": [
+          "Exit EX-13 was blocked in Building A on 12 March 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "factory",
+        "lines": [
+          "Factory maintenance reported clearing EX-13. Follow-up inspection is pending."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "02-1-supported",
+    "family": "exits",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 02",
+    "category": "supported",
+    "expected": "supported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Emergency alarms in Building A were tested on 12 March 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১২ মার্চ ২০২৬: ভবন এ-তে জরুরি সংকেত পরীক্ষা সম্পন্ন হয়।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "external",
+        "lines": [
+          "Emergency alarms in Building A were tested on 12 March 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "factory",
+        "lines": [
+          "১২ মার্চ ২০২৬: ভবন এ-তে জরুরি সংকেত পরীক্ষা সম্পন্ন হয়।"
+        ],
+        "scan": true
+      },
+      {
+        "role": "maintenance",
+        "title": "Prior period extract",
+        "filename": "prior-period-extract.pdf",
+        "issued_on": "2026-02-28",
+        "period_start": "2026-02-01",
+        "period_end": "2026-02-28",
+        "issuer": "factory",
+        "lines": [
+          "The alarm test failed in Building B during the previous reporting period."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "02-1-needs_review",
+    "family": "exits",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 02",
+    "category": "needs_review",
+    "expected": "needs_review",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No injuries in Building A were reported from 1 to 28 March 2026."
+    },
+    "acceptable": [
+      "needs_review",
+      "not_assessed"
+    ],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "external",
+        "lines": [
+          "No injuries in Building A were reported from 1 to 28 March 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "factory",
+        "lines": [
+          "An injury was logged on 12 March 2026. Allocation to building and unit is unknown."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "02-2-contradicted",
+    "family": "exits",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 02",
+    "category": "contradicted",
+    "expected": "contradicted",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No workplace injuries occurred from 1 to 28 March 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১৩ মার্চ ২০২৬ একজন শ্রমিক আহত হন।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "external",
+        "lines": [
+          "No workplace injuries occurred from 1 to 28 March 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "factory",
+        "lines": [
+          "১৩ মার্চ ২০২৬ একজন শ্রমিক আহত হন।"
+        ],
+        "scan": true
+      }
+    ]
+  },
+  {
+    "id": "02-2-unsupported",
+    "family": "exits",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 02",
+    "category": "unsupported",
+    "expected": "unsupported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "An evacuation drill was completed every week from 1 to 28 March 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "external",
+        "lines": [
+          "An evacuation drill was completed every week from 1 to 28 March 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "sop",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "factory",
+        "lines": [
+          "Procedure: schedule a drill every week and keep records for the exits review."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "02-2-unresolved",
+    "family": "exits",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 02",
+    "category": "unresolved",
+    "expected": "unresolved",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Exit EX-13 was blocked in Building B on 13 March 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "external",
+        "lines": [
+          "Exit EX-13 was blocked in Building B on 13 March 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "factory",
+        "lines": [
+          "Factory issued a plan to clear EX-13 in Building B. Correction was not verified."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "02-2-supported",
+    "family": "exits",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 02",
+    "category": "supported",
+    "expected": "supported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Emergency alarms in Building B were tested on 13 March 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "13 March 2026: alarm test completed in Building B. Operator signed the test register."
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "external",
+        "lines": [
+          "Emergency alarms in Building B were tested on 13 March 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "factory",
+        "lines": [
+          "13 March 2026: alarm test completed in Building B. Operator signed the test register."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "02-2-needs_review",
+    "family": "exits",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 02",
+    "category": "needs_review",
+    "expected": "needs_review",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No injuries in Building B were reported from 1 to 28 March 2026."
+    },
+    "acceptable": [
+      "needs_review",
+      "not_assessed"
+    ],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "external",
+        "lines": [
+          "No injuries in Building B were reported from 1 to 28 March 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "factory",
+        "lines": [
+          "An injury was logged on 13 March 2026. Allocation to building and unit is unknown."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "03-1-contradicted",
+    "family": "lifting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 03",
+    "category": "contradicted",
+    "expected": "contradicted",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No workplace injuries occurred from 1 to 28 April 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১২ এপ্রিল ২০২৬ একজন শ্রমিক আহত হন।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "external",
+        "lines": [
+          "No workplace injuries occurred from 1 to 28 April 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "factory",
+        "lines": [
+          "১২ এপ্রিল ২০২৬ একজন শ্রমিক আহত হন।"
+        ],
+        "scan": true
+      },
+      {
+        "role": "incident",
+        "title": "Prior period extract",
+        "filename": "prior-period-extract.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "factory",
+        "lines": [
+          "The previous month's injury total was zero."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "03-1-unsupported",
+    "family": "lifting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 03",
+    "category": "unsupported",
+    "expected": "unsupported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "An evacuation drill was completed every week from 1 to 28 April 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "external",
+        "lines": [
+          "An evacuation drill was completed every week from 1 to 28 April 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "sop",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "factory",
+        "lines": [
+          "Procedure: schedule a drill every week and keep records for the lifting review."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "03-1-unresolved",
+    "family": "lifting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 03",
+    "category": "unresolved",
+    "expected": "unresolved",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Exit EX-14 was blocked in Building A on 12 April 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "external",
+        "lines": [
+          "Exit EX-14 was blocked in Building A on 12 April 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "factory",
+        "lines": [
+          "Factory maintenance reported clearing EX-14. Follow-up inspection is pending."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "03-1-supported",
+    "family": "lifting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 03",
+    "category": "supported",
+    "expected": "supported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Emergency alarms in Building A were tested on 12 April 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১২ এপ্রিল ২০২৬: ভবন এ-তে জরুরি সংকেত পরীক্ষা সম্পন্ন হয়।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "external",
+        "lines": [
+          "Emergency alarms in Building A were tested on 12 April 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "factory",
+        "lines": [
+          "১২ এপ্রিল ২০২৬: ভবন এ-তে জরুরি সংকেত পরীক্ষা সম্পন্ন হয়।"
+        ],
+        "scan": true
+      },
+      {
+        "role": "maintenance",
+        "title": "Prior period extract",
+        "filename": "prior-period-extract.pdf",
+        "issued_on": "2026-03-28",
+        "period_start": "2026-03-01",
+        "period_end": "2026-03-28",
+        "issuer": "factory",
+        "lines": [
+          "The alarm test failed in Building B during the previous reporting period."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "03-1-needs_review",
+    "family": "lifting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 03",
+    "category": "needs_review",
+    "expected": "needs_review",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No injuries in Building A were reported from 1 to 28 April 2026."
+    },
+    "acceptable": [
+      "needs_review",
+      "not_assessed"
+    ],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "external",
+        "lines": [
+          "No injuries in Building A were reported from 1 to 28 April 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "factory",
+        "lines": [
+          "An injury was logged on 12 April 2026. Allocation to building and unit is unknown."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "03-2-contradicted",
+    "family": "lifting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 03",
+    "category": "contradicted",
+    "expected": "contradicted",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No workplace injuries occurred from 1 to 28 April 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১৩ এপ্রিল ২০২৬ একজন শ্রমিক আহত হন।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "external",
+        "lines": [
+          "No workplace injuries occurred from 1 to 28 April 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "factory",
+        "lines": [
+          "১৩ এপ্রিল ২০২৬ একজন শ্রমিক আহত হন।"
+        ],
+        "scan": true
+      }
+    ]
+  },
+  {
+    "id": "03-2-unsupported",
+    "family": "lifting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 03",
+    "category": "unsupported",
+    "expected": "unsupported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "An evacuation drill was completed every week from 1 to 28 April 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "external",
+        "lines": [
+          "An evacuation drill was completed every week from 1 to 28 April 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "sop",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "factory",
+        "lines": [
+          "Procedure: schedule a drill every week and keep records for the lifting review."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "03-2-unresolved",
+    "family": "lifting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 03",
+    "category": "unresolved",
+    "expected": "unresolved",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Exit EX-14 was blocked in Building B on 13 April 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "external",
+        "lines": [
+          "Exit EX-14 was blocked in Building B on 13 April 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "factory",
+        "lines": [
+          "Factory issued a plan to clear EX-14 in Building B. Correction was not verified."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "03-2-supported",
+    "family": "lifting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 03",
+    "category": "supported",
+    "expected": "supported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Emergency alarms in Building B were tested on 13 April 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "13 April 2026: alarm test completed in Building B. Operator signed the test register."
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "external",
+        "lines": [
+          "Emergency alarms in Building B were tested on 13 April 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "factory",
+        "lines": [
+          "13 April 2026: alarm test completed in Building B. Operator signed the test register."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "03-2-needs_review",
+    "family": "lifting",
+    "split": "development",
+    "factory": "SafetyProof Fictional Site 03",
+    "category": "needs_review",
+    "expected": "needs_review",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No injuries in Building B were reported from 1 to 28 April 2026."
+    },
+    "acceptable": [
+      "needs_review",
+      "not_assessed"
+    ],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "external",
+        "lines": [
+          "No injuries in Building B were reported from 1 to 28 April 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "factory",
+        "lines": [
+          "An injury was logged on 13 April 2026. Allocation to building and unit is unknown."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "04-1-contradicted",
+    "family": "guarding",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 04",
+    "category": "contradicted",
+    "expected": "contradicted",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No workplace injuries occurred from 1 to 28 May 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১২ মে ২০২৬ একজন শ্রমিক আহত হন।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "external",
+        "lines": [
+          "No workplace injuries occurred from 1 to 28 May 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "factory",
+        "lines": [
+          "১২ মে ২০২৬ একজন শ্রমিক আহত হন।"
+        ],
+        "scan": true
+      },
+      {
+        "role": "incident",
+        "title": "Prior period extract",
+        "filename": "prior-period-extract.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "factory",
+        "lines": [
+          "The previous month's injury total was zero."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "04-1-unsupported",
+    "family": "guarding",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 04",
+    "category": "unsupported",
+    "expected": "unsupported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "An evacuation drill was completed every week from 1 to 28 May 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "external",
+        "lines": [
+          "An evacuation drill was completed every week from 1 to 28 May 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "sop",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "factory",
+        "lines": [
+          "Procedure: schedule a drill every week and keep records for the guarding review."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "04-1-unresolved",
+    "family": "guarding",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 04",
+    "category": "unresolved",
+    "expected": "unresolved",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Exit EX-15 was blocked in Building A on 12 May 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "external",
+        "lines": [
+          "Exit EX-15 was blocked in Building A on 12 May 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "factory",
+        "lines": [
+          "Factory maintenance reported clearing EX-15. Follow-up inspection is pending."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "04-1-supported",
+    "family": "guarding",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 04",
+    "category": "supported",
+    "expected": "supported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Emergency alarms in Building A were tested on 12 May 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১২ মে ২০২৬: ভবন এ-তে জরুরি সংকেত পরীক্ষা সম্পন্ন হয়।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "external",
+        "lines": [
+          "Emergency alarms in Building A were tested on 12 May 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "factory",
+        "lines": [
+          "১২ মে ২০২৬: ভবন এ-তে জরুরি সংকেত পরীক্ষা সম্পন্ন হয়।"
+        ],
+        "scan": true
+      },
+      {
+        "role": "maintenance",
+        "title": "Prior period extract",
+        "filename": "prior-period-extract.pdf",
+        "issued_on": "2026-04-28",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-28",
+        "issuer": "factory",
+        "lines": [
+          "The alarm test failed in Building B during the previous reporting period."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "04-1-needs_review",
+    "family": "guarding",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 04",
+    "category": "needs_review",
+    "expected": "needs_review",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No injuries in Building A were reported from 1 to 28 May 2026."
+    },
+    "acceptable": [
+      "needs_review",
+      "not_assessed"
+    ],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "external",
+        "lines": [
+          "No injuries in Building A were reported from 1 to 28 May 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "factory",
+        "lines": [
+          "An injury was logged on 12 May 2026. Allocation to building and unit is unknown."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "04-2-contradicted",
+    "family": "guarding",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 04",
+    "category": "contradicted",
+    "expected": "contradicted",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No workplace injuries occurred from 1 to 28 May 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১৩ মে ২০২৬ একজন শ্রমিক আহত হন।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "external",
+        "lines": [
+          "No workplace injuries occurred from 1 to 28 May 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "factory",
+        "lines": [
+          "১৩ মে ২০২৬ একজন শ্রমিক আহত হন।"
+        ],
+        "scan": true
+      }
+    ]
+  },
+  {
+    "id": "04-2-unsupported",
+    "family": "guarding",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 04",
+    "category": "unsupported",
+    "expected": "unsupported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "An evacuation drill was completed every week from 1 to 28 May 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "external",
+        "lines": [
+          "An evacuation drill was completed every week from 1 to 28 May 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "sop",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "factory",
+        "lines": [
+          "Procedure: schedule a drill every week and keep records for the guarding review."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "04-2-unresolved",
+    "family": "guarding",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 04",
+    "category": "unresolved",
+    "expected": "unresolved",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Exit EX-15 was blocked in Building B on 13 May 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "external",
+        "lines": [
+          "Exit EX-15 was blocked in Building B on 13 May 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "factory",
+        "lines": [
+          "Factory issued a plan to clear EX-15 in Building B. Correction was not verified."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "04-2-supported",
+    "family": "guarding",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 04",
+    "category": "supported",
+    "expected": "supported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Emergency alarms in Building B were tested on 13 May 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "13 May 2026: alarm test completed in Building B. Operator signed the test register."
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "external",
+        "lines": [
+          "Emergency alarms in Building B were tested on 13 May 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "factory",
+        "lines": [
+          "13 May 2026: alarm test completed in Building B. Operator signed the test register."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "04-2-needs_review",
+    "family": "guarding",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 04",
+    "category": "needs_review",
+    "expected": "needs_review",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No injuries in Building B were reported from 1 to 28 May 2026."
+    },
+    "acceptable": [
+      "needs_review",
+      "not_assessed"
+    ],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "external",
+        "lines": [
+          "No injuries in Building B were reported from 1 to 28 May 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "factory",
+        "lines": [
+          "An injury was logged on 13 May 2026. Allocation to building and unit is unknown."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "05-1-contradicted",
+    "family": "ventilation",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 05",
+    "category": "contradicted",
+    "expected": "contradicted",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No workplace injuries occurred from 1 to 28 June 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১২ জুন ২০২৬ একজন শ্রমিক আহত হন।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "external",
+        "lines": [
+          "No workplace injuries occurred from 1 to 28 June 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "factory",
+        "lines": [
+          "১২ জুন ২০২৬ একজন শ্রমিক আহত হন।"
+        ],
+        "scan": true
+      },
+      {
+        "role": "incident",
+        "title": "Prior period extract",
+        "filename": "prior-period-extract.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "factory",
+        "lines": [
+          "The previous month's injury total was zero."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "05-1-unsupported",
+    "family": "ventilation",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 05",
+    "category": "unsupported",
+    "expected": "unsupported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "An evacuation drill was completed every week from 1 to 28 June 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "external",
+        "lines": [
+          "An evacuation drill was completed every week from 1 to 28 June 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "sop",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "factory",
+        "lines": [
+          "Procedure: schedule a drill every week and keep records for the ventilation review."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "05-1-unresolved",
+    "family": "ventilation",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 05",
+    "category": "unresolved",
+    "expected": "unresolved",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Exit EX-16 was blocked in Building A on 12 June 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "external",
+        "lines": [
+          "Exit EX-16 was blocked in Building A on 12 June 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "factory",
+        "lines": [
+          "Factory maintenance reported clearing EX-16. Follow-up inspection is pending."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "05-1-supported",
+    "family": "ventilation",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 05",
+    "category": "supported",
+    "expected": "supported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Emergency alarms in Building A were tested on 12 June 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১২ জুন ২০২৬: ভবন এ-তে জরুরি সংকেত পরীক্ষা সম্পন্ন হয়।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "external",
+        "lines": [
+          "Emergency alarms in Building A were tested on 12 June 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "factory",
+        "lines": [
+          "১২ জুন ২০২৬: ভবন এ-তে জরুরি সংকেত পরীক্ষা সম্পন্ন হয়।"
+        ],
+        "scan": true
+      },
+      {
+        "role": "maintenance",
+        "title": "Prior period extract",
+        "filename": "prior-period-extract.pdf",
+        "issued_on": "2026-05-28",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-28",
+        "issuer": "factory",
+        "lines": [
+          "The alarm test failed in Building B during the previous reporting period."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "05-1-needs_review",
+    "family": "ventilation",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 05",
+    "category": "needs_review",
+    "expected": "needs_review",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No injuries in Building A were reported from 1 to 28 June 2026."
+    },
+    "acceptable": [
+      "needs_review",
+      "not_assessed"
+    ],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "external",
+        "lines": [
+          "No injuries in Building A were reported from 1 to 28 June 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "factory",
+        "lines": [
+          "An injury was logged on 12 June 2026. Allocation to building and unit is unknown."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "05-2-contradicted",
+    "family": "ventilation",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 05",
+    "category": "contradicted",
+    "expected": "contradicted",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No workplace injuries occurred from 1 to 28 June 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১৩ জুন ২০২৬ একজন শ্রমিক আহত হন।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "external",
+        "lines": [
+          "No workplace injuries occurred from 1 to 28 June 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "factory",
+        "lines": [
+          "১৩ জুন ২০২৬ একজন শ্রমিক আহত হন।"
+        ],
+        "scan": true
+      }
+    ]
+  },
+  {
+    "id": "05-2-unsupported",
+    "family": "ventilation",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 05",
+    "category": "unsupported",
+    "expected": "unsupported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "An evacuation drill was completed every week from 1 to 28 June 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "external",
+        "lines": [
+          "An evacuation drill was completed every week from 1 to 28 June 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "sop",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "factory",
+        "lines": [
+          "Procedure: schedule a drill every week and keep records for the ventilation review."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "05-2-unresolved",
+    "family": "ventilation",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 05",
+    "category": "unresolved",
+    "expected": "unresolved",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Exit EX-16 was blocked in Building B on 13 June 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "external",
+        "lines": [
+          "Exit EX-16 was blocked in Building B on 13 June 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "factory",
+        "lines": [
+          "Factory issued a plan to clear EX-16 in Building B. Correction was not verified."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "05-2-supported",
+    "family": "ventilation",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 05",
+    "category": "supported",
+    "expected": "supported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Emergency alarms in Building B were tested on 13 June 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "13 June 2026: alarm test completed in Building B. Operator signed the test register."
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "external",
+        "lines": [
+          "Emergency alarms in Building B were tested on 13 June 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "factory",
+        "lines": [
+          "13 June 2026: alarm test completed in Building B. Operator signed the test register."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "05-2-needs_review",
+    "family": "ventilation",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 05",
+    "category": "needs_review",
+    "expected": "needs_review",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No injuries in Building B were reported from 1 to 28 June 2026."
+    },
+    "acceptable": [
+      "needs_review",
+      "not_assessed"
+    ],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "external",
+        "lines": [
+          "No injuries in Building B were reported from 1 to 28 June 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "factory",
+        "lines": [
+          "An injury was logged on 13 June 2026. Allocation to building and unit is unknown."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "06-1-contradicted",
+    "family": "housekeeping",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 06",
+    "category": "contradicted",
+    "expected": "contradicted",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No workplace injuries occurred from 1 to 28 July 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১২ জুলাই ২০২৬ একজন শ্রমিক আহত হন।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "external",
+        "lines": [
+          "No workplace injuries occurred from 1 to 28 July 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "factory",
+        "lines": [
+          "১২ জুলাই ২০২৬ একজন শ্রমিক আহত হন।"
+        ],
+        "scan": true
+      },
+      {
+        "role": "incident",
+        "title": "Prior period extract",
+        "filename": "prior-period-extract.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "factory",
+        "lines": [
+          "The previous month's injury total was zero."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "06-1-unsupported",
+    "family": "housekeeping",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 06",
+    "category": "unsupported",
+    "expected": "unsupported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "An evacuation drill was completed every week from 1 to 28 July 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "external",
+        "lines": [
+          "An evacuation drill was completed every week from 1 to 28 July 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "sop",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "factory",
+        "lines": [
+          "Procedure: schedule a drill every week and keep records for the housekeeping review."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "06-1-unresolved",
+    "family": "housekeeping",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 06",
+    "category": "unresolved",
+    "expected": "unresolved",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Exit EX-17 was blocked in Building A on 12 July 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "external",
+        "lines": [
+          "Exit EX-17 was blocked in Building A on 12 July 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "factory",
+        "lines": [
+          "Factory maintenance reported clearing EX-17. Follow-up inspection is pending."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "06-1-supported",
+    "family": "housekeeping",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 06",
+    "category": "supported",
+    "expected": "supported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Emergency alarms in Building A were tested on 12 July 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১২ জুলাই ২০২৬: ভবন এ-তে জরুরি সংকেত পরীক্ষা সম্পন্ন হয়।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "external",
+        "lines": [
+          "Emergency alarms in Building A were tested on 12 July 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "factory",
+        "lines": [
+          "১২ জুলাই ২০২৬: ভবন এ-তে জরুরি সংকেত পরীক্ষা সম্পন্ন হয়।"
+        ],
+        "scan": true
+      },
+      {
+        "role": "maintenance",
+        "title": "Prior period extract",
+        "filename": "prior-period-extract.pdf",
+        "issued_on": "2026-06-28",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-28",
+        "issuer": "factory",
+        "lines": [
+          "The alarm test failed in Building B during the previous reporting period."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "06-1-needs_review",
+    "family": "housekeeping",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 06",
+    "category": "needs_review",
+    "expected": "needs_review",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No injuries in Building A were reported from 1 to 28 July 2026."
+    },
+    "acceptable": [
+      "needs_review",
+      "not_assessed"
+    ],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "external",
+        "lines": [
+          "No injuries in Building A were reported from 1 to 28 July 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "factory",
+        "lines": [
+          "An injury was logged on 12 July 2026. Allocation to building and unit is unknown."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "06-2-contradicted",
+    "family": "housekeeping",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 06",
+    "category": "contradicted",
+    "expected": "contradicted",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No workplace injuries occurred from 1 to 28 July 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "১৩ জুলাই ২০২৬ একজন শ্রমিক আহত হন।"
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "external",
+        "lines": [
+          "No workplace injuries occurred from 1 to 28 July 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "factory",
+        "lines": [
+          "১৩ জুলাই ২০২৬ একজন শ্রমিক আহত হন।"
+        ],
+        "scan": true
+      }
+    ]
+  },
+  {
+    "id": "06-2-unsupported",
+    "family": "housekeeping",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 06",
+    "category": "unsupported",
+    "expected": "unsupported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "An evacuation drill was completed every week from 1 to 28 July 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "external",
+        "lines": [
+          "An evacuation drill was completed every week from 1 to 28 July 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "sop",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "factory",
+        "lines": [
+          "Procedure: schedule a drill every week and keep records for the housekeeping review."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "06-2-unresolved",
+    "family": "housekeeping",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 06",
+    "category": "unresolved",
+    "expected": "unresolved",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Exit EX-17 was blocked in Building B on 13 July 2026."
+    },
+    "acceptable": [],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "external",
+        "lines": [
+          "Exit EX-17 was blocked in Building B on 13 July 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "factory",
+        "lines": [
+          "Factory issued a plan to clear EX-17 in Building B. Correction was not verified."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "06-2-supported",
+    "family": "housekeeping",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 06",
+    "category": "supported",
+    "expected": "supported",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "Emergency alarms in Building B were tested on 13 July 2026."
+    },
+    "acceptable": [],
+    "citations": [
+      {
+        "filename": "evidence-record.pdf",
+        "page": 1,
+        "quote": "13 July 2026: alarm test completed in Building B. Operator signed the test register."
+      }
+    ],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "external",
+        "lines": [
+          "Emergency alarms in Building B were tested on 13 July 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "maintenance",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "factory",
+        "lines": [
+          "13 July 2026: alarm test completed in Building B. Operator signed the test register."
+        ],
+        "scan": false
+      }
+    ]
+  },
+  {
+    "id": "06-2-needs_review",
+    "family": "housekeeping",
+    "split": "held_out",
+    "factory": "SafetyProof Fictional Site 06",
+    "category": "needs_review",
+    "expected": "needs_review",
+    "target": {
+      "filename": "inspection-review.pdf",
+      "page": 1,
+      "quote": "No injuries in Building B were reported from 1 to 28 July 2026."
+    },
+    "acceptable": [
+      "needs_review",
+      "not_assessed"
+    ],
+    "citations": [],
+    "docs": [
+      {
+        "role": "inspection",
+        "title": "Inspection review",
+        "filename": "inspection-review.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "external",
+        "lines": [
+          "No injuries in Building B were reported from 1 to 28 July 2026."
+        ],
+        "scan": false
+      },
+      {
+        "role": "incident",
+        "title": "Evidence record",
+        "filename": "evidence-record.pdf",
+        "issued_on": "2026-07-28",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-28",
+        "issuer": "factory",
+        "lines": [
+          "An injury was logged on 13 July 2026. Allocation to building and unit is unknown."
+        ],
+        "scan": false
+      }
+    ]
+  }
+]

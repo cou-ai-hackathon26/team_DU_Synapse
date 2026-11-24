@@ -1,0 +1,59 @@
+{
+  "factory": "Shaluk Threadworks Ltd.",
+  "title": "April safety review",
+  "programme": "Fictional internal documentary review",
+  "period_start": "2026-04-01",
+  "period_end": "2026-04-30",
+  "documents": [
+    {
+      "filename": "march-inspection.pdf",
+      "title": "March inspection",
+      "role": "inspection",
+      "issued_on": "2026-03-06",
+      "period_start": "2026-03-01",
+      "period_end": "2026-03-06",
+      "issuer": "external",
+      "scan": false
+    },
+    {
+      "filename": "april-inspection.pdf",
+      "title": "April inspection review",
+      "role": "inspection",
+      "issued_on": "2026-04-30",
+      "period_start": "2026-04-01",
+      "period_end": "2026-04-30",
+      "issuer": "external",
+      "scan": false
+    },
+    {
+      "filename": "fire-procedure.pdf",
+      "title": "Fire drill procedure",
+      "role": "sop",
+      "issued_on": "2026-01-02",
+      "period_start": null,
+      "period_end": null,
+      "issuer": "factory",
+      "scan": false
+    },
+    {
+      "filename": "incident-register.pdf",
+      "title": "April incident register",
+      "role": "incident",
+      "issued_on": "2026-04-30",
+      "period_start": "2026-04-01",
+      "period_end": "2026-04-30",
+      "issuer": "factory",
+      "scan": true
+    },
+    {
+      "filename": "corrective-action-plan.pdf",
+      "title": "March corrective action plan",
+      "role": "cap",
+      "issued_on": "2026-03-12",
+      "period_start": null,
+      "period_end": null,
+      "issuer": "factory",
+      "scan": false
+    }
+  ]
+}
