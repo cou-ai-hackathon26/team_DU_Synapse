@@ -183,6 +183,17 @@ def test_explicit_finding_link_surfaces_asset_building_or_floor_conflict(quote, 
     assert "conflicts" in reason
 
 
+def test_generic_extracted_nouns_do_not_hide_conflicting_machine_ids():
+    f = finding("Finding FI-16. Machine M-05 has an exposed belt.", "belt")
+    cap = action("CA-01 for finding FI-16: Guard the belt on Machine M-50.", "belt")
+    assert linkage(f, cap)[0] == "explicit_reference_conflict"
+
+
+def test_generic_nouns_without_finding_reference_do_not_create_a_link():
+    cap = action("CA-01: Mark the aisle with floor paint.", "aisle", [])
+    assert linkage(finding(), cap) is None
+
+
 def test_different_explicit_finding_id_does_not_link():
     f = finding("Finding FI-16. Exit E-02 was obstructed in Building A on floor 1.")
     assert linkage(f, action("CA-01 for finding FI-17: Clear Exit E-02.", "Exit E-02")) is None
