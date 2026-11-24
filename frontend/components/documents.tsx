@@ -29,6 +29,7 @@ import type { components } from "@/lib/schema";
 import { Busy, DocIcon, ErrorNote, Modal, Tag } from "./ui";
 import { Preview } from "./viewer";
 import { sampleCatalog } from "@/lib/samples";
+import { currentUploadDocuments } from "@/lib/case-upload";
 import {
   inspectionMonths,
   latestReadyVersions,
@@ -950,7 +951,8 @@ function Upload({
     duplicate_of: string | null;
     duplicate_warning: string | null;
   };
-  const existingCap = d.documents.find((item) => item.role === "cap");
+  const uploadDocuments = currentUploadDocuments(d);
+  const existingCap = uploadDocuments.find((item) => item.role === "cap");
   const [err, setErr] = useState(""),
     [busy, setBusy] = useState(false),
     [file, setFile] = useState<File | null>(null),
@@ -1383,7 +1385,7 @@ function Upload({
             Document relationship
             <select value={doc} onChange={(e) => setDoc(e.target.value)}>
               <option value="">New, separate record</option>
-              {d.documents
+              {uploadDocuments
                 .filter((v) => v.role === role)
                 .map((v) => (
                   <option key={v.id} value={v.id}>

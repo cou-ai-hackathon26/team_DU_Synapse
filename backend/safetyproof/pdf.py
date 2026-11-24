@@ -215,12 +215,28 @@ def parse_pdf(data, version_id, tessdata, offset=0, batch_size=None):
     }
 
 
-if __name__ == "__main__":
+def configure_parser_limits():
     import resource
 
-    resource.setrlimit(resource.RLIMIT_CPU, (80, 85))
-    resource.setrlimit(resource.RLIMIT_AS, (410 * 1024**2, 410 * 1024**2))
+    def bounded_limit(kind, soft, hard):
+        current_soft, maximum = resource.getrlimit(kind)
+        if current_soft != resource.RLIM_INFINITY:
+            soft = min(soft, current_soft)
+        if maximum != resource.RLIM_INFINITY:
+            soft, hard = min(soft, maximum), min(hard, maximum)
+        resource.setrlimit(kind, (soft, hard))
+
+    bounded_limit(resource.RLIMIT_CPU, 80, 85)
+    # Darwin rejects this address-space cap for the Python/PDF native runtime.
+    # Keep CPU, page/render/text bounds and the parent subprocess timeout there;
+    # retain the address-space cap on Linux deployments.
+    if sys.platform != "darwin":
+        bounded_limit(resource.RLIMIT_AS, 410 * 1024**2, 410 * 1024**2)
+
+
+if __name__ == "__main__":
     try:
+        configure_parser_limits()
         result = parse_pdf(
             sys.stdin.buffer.read(),
             sys.argv[1],
